@@ -1,0 +1,4001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Huefy — Find your perfect colors</title>
+<meta name="description" content="Huefy: discover, create, customize, save, and share beautiful color palettes.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+/* =========================================================
+   HUEFY — SOFT BEIGE / CLAUDE-INSPIRED UI
+   Visual-only redesign
+   Keeps existing class names and JavaScript functionality
+   ========================================================= */
+
+:root{
+  --bg:#F5F0E8;
+  --bg-elev:#FBF9F5;
+  --bg-soft:#EDE7DC;
+  --bg-hover:#E8E0D3;
+
+  --text:#26231F;
+  --text-soft:#686158;
+  --text-faint:#9B9388;
+
+  --border:rgba(55,48,40,.10);
+  --border-strong:rgba(55,48,40,.17);
+
+  --brand-1:#C8754A;
+  --brand-2:#B55C43;
+  --brand-3:#D99A72;
+  --brand-4:#E4B98C;
+
+  --grad-brand:linear-gradient(135deg,#C8754A,#B55C43);
+
+  --shadow-sm:
+    0 1px 2px rgba(53,45,36,.035),
+    0 2px 5px rgba(53,45,36,.035);
+
+  --shadow-md:
+    0 4px 10px rgba(53,45,36,.055),
+    0 10px 25px rgba(53,45,36,.045);
+
+  --shadow-lg:
+    0 12px 30px rgba(53,45,36,.08),
+    0 24px 55px rgba(53,45,36,.055);
+
+  --radius-sm:12px;
+  --radius-md:18px;
+  --radius-lg:26px;
+  --radius-xl:34px;
+  --radius-pill:999px;
+
+  --glass-bg:rgba(251,249,245,.82);
+  --glass-border:rgba(255,255,255,.58);
+
+  color-scheme:light;
+}
+
+:root[data-theme="dark"]{
+  --bg:#171512;
+  --bg-elev:#211E1A;
+  --bg-soft:#2A2621;
+  --bg-hover:#332E27;
+
+  --text:#F4EFE7;
+  --text-soft:#B8AEA1;
+  --text-faint:#81776C;
+
+  --border:rgba(255,244,229,.09);
+  --border-strong:rgba(255,244,229,.16);
+
+  --brand-1:#D9895C;
+  --brand-2:#C56C4F;
+  --brand-3:#E0A078;
+  --brand-4:#E8BD91;
+
+  --grad-brand:linear-gradient(135deg,#D9895C,#C56C4F);
+
+  --shadow-sm:
+    0 1px 2px rgba(0,0,0,.28),
+    0 2px 5px rgba(0,0,0,.18);
+
+  --shadow-md:
+    0 8px 22px rgba(0,0,0,.28),
+    0 18px 38px rgba(0,0,0,.18);
+
+  --shadow-lg:
+    0 18px 45px rgba(0,0,0,.38),
+    0 30px 70px rgba(0,0,0,.28);
+
+  --glass-bg:rgba(33,30,26,.84);
+  --glass-border:rgba(255,255,255,.07);
+
+  color-scheme:dark;
+}
+
+
+/* =========================================================
+   BASE
+   ========================================================= */
+
+*{
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+html,
+body{
+  overflow-x:hidden;
+  max-width:100%;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(
+      circle at 50% -20%,
+      rgba(220,190,155,.13),
+      transparent 42%
+    ),
+    var(--bg);
+  color:var(--text);
+  transition:
+    background .35s ease,
+    color .35s ease;
+  -webkit-font-smoothing:antialiased;
+}
+
+h1,
+h2,
+h3,
+h4{
+  font-weight:700;
+  letter-spacing:-.025em;
+  margin:0;
+}
+
+button,
+.btn{
+  font:inherit;
+}
+
+a{
+  color:inherit;
+}
+
+.container-huefy{
+  width:100%;
+  max-width:1240px;
+  margin:0 auto;
+  padding:0 22px;
+}
+
+::selection{
+  background:rgba(200,117,74,.22);
+  color:var(--text);
+}
+
+:focus-visible{
+  outline:2px solid var(--brand-1);
+  outline-offset:3px;
+  border-radius:12px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.huefy-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+
+  background:var(--glass-bg);
+
+  backdrop-filter:blur(22px) saturate(120%);
+  -webkit-backdrop-filter:blur(22px) saturate(120%);
+
+  border-bottom:1px solid var(--border);
+
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.22);
+}
+
+.huefy-header .container-huefy{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  height:68px;
+}
+
+.huefy-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  font-weight:800;
+  font-size:1.28rem;
+
+  text-decoration:none;
+  color:var(--text);
+
+  letter-spacing:-.035em;
+}
+
+.huefy-logo svg{
+  display:block;
+}
+
+.huefy-nav{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+.huefy-nav a{
+  padding:8px 13px;
+
+  border-radius:12px;
+
+  text-decoration:none;
+
+  font-weight:500;
+  font-size:.9rem;
+
+  color:var(--text-soft);
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
+}
+
+.huefy-nav a:hover,
+.huefy-nav a.active{
+  background:var(--bg-soft);
+  color:var(--text);
+}
+
+.header-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.icon-btn{
+  width:40px;
+  height:40px;
+
+  border-radius:14px;
+
+  border:1px solid var(--border);
+
+  background:var(--bg-elev);
+
+  cursor:pointer;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:1rem;
+  color:var(--text);
+
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+.icon-btn:hover{
+  transform:translateY(-1px);
+  background:var(--bg-soft);
+  box-shadow:var(--shadow-sm);
+}
+
+.nav-toggle{
+  display:none;
+}
+
+@media(max-width:900px){
+
+  .huefy-nav{
+    display:none;
+  }
+
+  .nav-toggle{
+    display:flex;
+  }
+
+  .huefy-nav.mobile-open{
+    display:flex;
+
+    flex-direction:column;
+
+    position:fixed;
+
+    top:68px;
+    left:12px;
+    right:12px;
+
+    background:var(--bg-elev);
+
+    padding:10px;
+
+    gap:3px;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow-lg);
+  }
+
+  .huefy-nav.mobile-open a{
+    width:100%;
+    padding:11px 14px;
+  }
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.btn{
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  gap:8px;
+
+  padding:11px 18px;
+
+  border-radius:15px;
+
+  border:1px solid transparent;
+
+  font-weight:600;
+  font-size:.9rem;
+
+  cursor:pointer;
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    background .2s ease,
+    border-color .2s ease;
+
+  text-decoration:none;
+}
+
+.btn:active{
+  transform:scale(.975);
+}
+
+.btn-primary{
+  background:var(--text);
+  color:var(--bg);
+
+  box-shadow:var(--shadow-sm);
+}
+
+.btn-primary:hover{
+  transform:translateY(-1px);
+  box-shadow:var(--shadow-md);
+}
+
+.btn-outline{
+  background:transparent;
+
+  border-color:var(--border-strong);
+
+  color:var(--text);
+}
+
+.btn-outline:hover{
+  background:var(--bg-elev);
+  border-color:rgba(55,48,40,.23);
+}
+
+.btn-soft{
+  background:var(--bg-soft);
+  color:var(--text);
+
+  border-color:transparent;
+}
+
+.btn-soft:hover{
+  background:var(--bg-hover);
+}
+
+.btn-sm{
+  padding:8px 12px;
+  font-size:.8rem;
+  border-radius:12px;
+}
+
+.btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
+}
+
+
+/* =========================================================
+   GENERIC CARDS
+   ========================================================= */
+
+.card{
+  background:var(--bg-elev);
+
+  border:1px solid var(--border);
+
+  border-radius:24px;
+
+  box-shadow:var(--shadow-sm);
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease;
+}
+
+.card:hover{
+  box-shadow:var(--shadow-md);
+}
+
+.card-lift:hover{
+  transform:translateY(-3px);
+}
+
+.section{
+  padding:64px 0;
+}
+
+.section-title{
+  font-size:clamp(1.65rem,3vw,2.3rem);
+  margin-bottom:8px;
+}
+
+.section-sub{
+  color:var(--text-soft);
+  font-size:1rem;
+
+  margin-bottom:30px;
+
+  max-width:620px;
+
+  line-height:1.65;
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+
+  padding:100px 0 78px;
+
+  background:
+    radial-gradient(
+      circle at 15% 20%,
+      rgba(211,164,122,.18),
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 85% 15%,
+      rgba(188,133,101,.13),
+      transparent 43%
+    ),
+    radial-gradient(
+      circle at 50% 100%,
+      rgba(222,194,157,.18),
+      transparent 50%
+    );
+}
+
+.hero-blob{
+  position:absolute;
+
+  border-radius:50%;
+
+  filter:blur(70px);
+
+  opacity:.28;
+
+  z-index:0;
+
+  animation:floatBlob 16s ease-in-out infinite;
+}
+
+@keyframes floatBlob{
+
+  0%,100%{
+    transform:translate(0,0) scale(1);
+  }
+
+  33%{
+    transform:translate(24px,-18px) scale(1.06);
+  }
+
+  66%{
+    transform:translate(-18px,20px) scale(.96);
+  }
+}
+
+.hero-content{
+  position:relative;
+
+  z-index:1;
+
+  text-align:center;
+
+  max-width:760px;
+
+  margin:0 auto;
+}
+
+.hero-title{
+  font-size:clamp(2.8rem,7vw,5rem);
+
+  line-height:1.02;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9E5B43,
+      #C8754A 45%,
+      #D49A70
+    );
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  color:transparent;
+
+  animation:heroGradient 8s ease-in-out infinite alternate;
+}
+
+@keyframes heroGradient{
+
+  0%{
+    filter:saturate(.9);
+  }
+
+  100%{
+    filter:saturate(1.15);
+  }
+}
+
+.hero-subtitle{
+  font-weight:600;
+
+  font-size:clamp(1.05rem,2vw,1.35rem);
+
+  margin-top:12px;
+}
+
+.hero-desc{
+  color:var(--text-soft);
+
+  font-size:1.03rem;
+
+  line-height:1.7;
+
+  margin:18px auto 30px;
+
+  max-width:570px;
+}
+
+.hero-actions{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
+  justify-content:center;
+}
+
+
+/* =========================================================
+   TOASTS
+   ========================================================= */
+
+.toast-host{
+  position:fixed;
+
+  bottom:22px;
+  right:22px;
+
+  z-index:9999;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:9px;
+
+  max-width:90vw;
+}
+
+.huefy-toast{
+  background:var(--bg-elev);
+
+  color:var(--text);
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow-lg);
+
+  padding:12px 16px;
+
+  border-radius:16px;
+
+  font-weight:500;
+  font-size:.88rem;
+
+  display:flex;
+  align-items:center;
+
+  gap:10px;
+
+  opacity:0;
+
+  transform:translateY(10px) scale(.97);
+
+  transition:.25s ease;
+}
+
+.huefy-toast.show{
+  opacity:1;
+
+  transform:translateY(0) scale(1);
+}
+
+.toast-icon{
+  color:var(--brand-1);
+  font-weight:700;
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.huefy-modal-overlay{
+  position:fixed;
+  inset:0;
+
+  background:rgba(40,34,28,.38);
+
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+
+  display:none;
+
+  align-items:center;
+  justify-content:center;
+
+  z-index:2000;
+
+  padding:16px;
+}
+
+.huefy-modal-overlay.open{
+  display:flex;
+}
+
+.huefy-modal{
+  background:var(--bg-elev);
+
+  border:1px solid var(--border);
+
+  border-radius:28px;
+
+  padding:28px;
+
+  max-width:520px;
+
+  width:100%;
+
+  box-shadow:var(--shadow-lg);
+
+  max-height:86vh;
+
+  overflow-y:auto;
+
+  animation:modalIn .25s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes modalIn{
+
+  from{
+    opacity:0;
+    transform:translateY(14px) scale(.97);
+  }
+
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.huefy-modal h3{
+  margin-bottom:14px;
+}
+
+.huefy-modal-close{
+  float:right;
+
+  background:var(--bg-soft);
+
+  border:0;
+
+  width:34px;
+  height:34px;
+
+  border-radius:11px;
+
+  font-size:1rem;
+
+  cursor:pointer;
+
+  color:var(--text-soft);
+
+  transition:.2s;
+}
+
+.huefy-modal-close:hover{
+  background:var(--bg-hover);
+  color:var(--text);
+}
+
+
+/* =========================================================
+   FORMS
+   ========================================================= */
+
+input[type=text],
+input[type=search],
+input[type=number],
+select,
+textarea{
+
+  font:inherit;
+
+  background:var(--bg-soft);
+
+  border:1px solid transparent;
+
+  color:var(--text);
+
+  border-radius:15px;
+
+  padding:11px 14px;
+
+  font-size:.9rem;
+
+  width:100%;
+
+  transition:
+    border-color .2s ease,
+    background .2s ease,
+    box-shadow .2s ease;
+}
+
+input::placeholder,
+textarea::placeholder{
+  color:var(--text-faint);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  outline:none;
+
+  border-color:rgba(200,117,74,.38);
+
+  background:var(--bg-elev);
+
+  box-shadow:
+    0 0 0 3px rgba(200,117,74,.08);
+}
+
+input[type=color]{
+  width:44px;
+  height:44px;
+
+  border:none;
+
+  border-radius:13px;
+
+  padding:3px;
+
+  cursor:pointer;
+
+  background:var(--bg-soft);
+}
+
+input[type=range]{
+  width:100%;
+  accent-color:var(--brand-1);
+}
+
+label{
+  font-weight:600;
+
+  font-size:.8rem;
+
+  color:var(--text-soft);
+
+  display:block;
+
+  margin-bottom:6px;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.huefy-footer{
+  border-top:1px solid var(--border);
+
+  padding:44px 0 28px;
+
+  margin-top:40px;
+
+  color:var(--text-soft);
+
+  font-size:.86rem;
+}
+
+.huefy-footer .container-huefy{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  justify-content:space-between;
+
+  gap:16px;
+
+  align-items:center;
+}
+
+
+/* =========================================================
+   CHIPS
+   ========================================================= */
+
+.chip{
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:6px;
+
+  padding:7px 12px;
+
+  border-radius:999px;
+
+  background:var(--bg-soft);
+
+  font-size:.77rem;
+
+  font-weight:600;
+
+  color:var(--text-soft);
+
+  border:1px solid transparent;
+
+  cursor:pointer;
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease,
+    border-color .2s ease;
+}
+
+.chip.active{
+  background:var(--text);
+  color:var(--bg);
+  border-color:transparent;
+}
+
+.chip:hover{
+  transform:translateY(-1px);
+  border-color:var(--border);
+}
+
+
+/* =========================================================
+   SHIMMER
+   ========================================================= */
+
+@keyframes shimmer{
+
+  0%{
+    background-position:-500px 0;
+  }
+
+  100%{
+    background-position:500px 0;
+  }
+}
+
+.shimmer{
+  background:
+    linear-gradient(
+      90deg,
+      var(--bg-soft) 25%,
+      var(--bg-hover) 37%,
+      var(--bg-soft) 63%
+    );
+
+  background-size:500px 100%;
+
+  animation:shimmer 1.6s infinite;
+}
+
+
+/* =========================================================
+   GENERAL ANIMATIONS
+   ========================================================= */
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+.fade-up{
+  animation:fadeUp .5s ease both;
+}
+
+@keyframes popIn{
+
+  from{
+    opacity:0;
+    transform:scale(.9);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+.pop-in{
+  animation:
+    popIn .35s cubic-bezier(.34,1.56,.64,1) both;
+}
+
+@keyframes bounceLetter{
+
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-9px);
+  }
+}
+
+@keyframes glow{
+
+  0%,100%{
+    box-shadow:0 0 0 rgba(200,117,74,0);
+  }
+
+  50%{
+    box-shadow:
+      0 0 28px rgba(200,117,74,.20);
+  }
+}
+
+.glow-pulse{
+  animation:glow 2.5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   PALETTE GENERATOR
+   ========================================================= */
+
+.palette-toolbar{
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:9px;
+
+  align-items:center;
+
+  margin-bottom:20px;
+}
+
+.palette-strip{
+  display:flex;
+
+  gap:16px;
+
+  flex-wrap:wrap;
+
+  margin-bottom:18px;
+}
+
+
+/* MAIN COLOR CARD */
+
+.swatch-card{
+
+  flex:1 1 170px;
+
+  min-width:170px;
+
+  border-radius:24px;
+
+  overflow:hidden;
+
+  background:var(--bg-elev);
+
+  border:1px solid var(--border);
+
+  box-shadow:var(--shadow-sm);
+
+  display:flex;
+
+  flex-direction:column;
+
+  cursor:grab;
+
+  transition:
+    transform .28s cubic-bezier(.2,.8,.2,1),
+    box-shadow .28s ease,
+    border-color .25s ease;
+
+  position:relative;
+}
+
+.swatch-card:hover{
+
+  transform:translateY(-6px);
+
+  box-shadow:var(--shadow-lg);
+
+  border-color:var(--border-strong);
+}
+
+.swatch-card.dragging{
+  opacity:.45;
+  transform:scale(.98);
+}
+
+
+/* COLOR AREA */
+
+.swatch-color{
+
+  height:170px;
+
+  position:relative;
+
+  display:flex;
+
+  align-items:flex-start;
+
+  justify-content:space-between;
+
+  padding:12px;
+
+  overflow:hidden;
+}
+
+.swatch-color::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.18),
+      transparent 38%,
+      rgba(0,0,0,.06)
+    );
+
+  opacity:.65;
+
+  pointer-events:none;
+
+  transition:opacity .3s ease;
+}
+
+.swatch-card:hover .swatch-color::after{
+  opacity:.9;
+}
+
+
+/* SOFT CONTROL BUTTONS */
+
+.swatch-lock,
+.swatch-remove{
+
+  position:relative;
+
+  z-index:3;
+
+  width:32px;
+  height:32px;
+
+  border:none;
+
+  border-radius:12px;
+
+  background:rgba(20,18,16,.48);
+
+  backdrop-filter:blur(8px);
+
+  -webkit-backdrop-filter:blur(8px);
+
+  color:#fff;
+
+  cursor:pointer;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:0;
+
+  opacity:0;
+
+  transform:translateY(-3px);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease,
+    background .2s ease;
+}
+
+
+/* CSS ICON — LOCK */
+
+.swatch-lock::before{
+
+  content:"";
+
+  width:9px;
+  height:8px;
+
+  border:1.5px solid currentColor;
+
+  border-radius:2px;
+
+  position:absolute;
+
+  top:12px;
+}
+
+.swatch-lock::after{
+
+  content:"";
+
+  width:7px;
+  height:7px;
+
+  border:1.5px solid currentColor;
+
+  border-bottom:0;
+
+  border-radius:6px 6px 0 0;
+
+  position:absolute;
+
+  top:7px;
+}
+
+
+/* CSS ICON — CLOSE */
+
+.swatch-remove::before,
+.swatch-remove::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:12px;
+  height:1.5px;
+
+  background:currentColor;
+
+  border-radius:2px;
+}
+
+.swatch-remove::before{
+  transform:rotate(45deg);
+}
+
+.swatch-remove::after{
+  transform:rotate(-45deg);
+}
+
+
+.swatch-card:hover .swatch-lock,
+.swatch-card:hover .swatch-remove{
+
+  opacity:1;
+
+  transform:translateY(0);
+}
+
+.swatch-lock:hover,
+.swatch-remove:hover{
+
+  background:rgba(20,18,16,.68);
+
+  transform:scale(1.06);
+}
+
+
+/* DRAG HANDLE */
+
+.drag-handle{
+
+  cursor:grab;
+
+  font-size:0;
+
+  opacity:0;
+
+  color:#fff;
+
+  width:32px;
+  height:32px;
+
+  border-radius:12px;
+
+  background:rgba(20,18,16,.42);
+
+  backdrop-filter:blur(8px);
+
+  position:relative;
+
+  z-index:3;
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease;
+}
+
+
+/* CSS DRAG DOTS */
+
+.drag-handle::before{
+
+  content:"";
+
+  width:4px;
+  height:4px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      currentColor 1.4px,
+      transparent 1.7px
+    );
+
+  background-size:6px 6px;
+
+  position:absolute;
+
+  inset:9px 10px;
+}
+
+.swatch-card:hover .drag-handle{
+
+  opacity:1;
+}
+
+
+/* COLOR INFORMATION */
+
+.swatch-body{
+
+  padding:13px 15px 15px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:5px;
+}
+
+.swatch-name{
+
+  font-weight:600;
+
+  font-size:.88rem;
+
+  color:var(--text);
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+
+  white-space:nowrap;
+}
+
+.swatch-value-row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:8px;
+
+  font-family:monospace;
+
+  font-size:.76rem;
+
+  color:var(--text-soft);
+}
+
+.swatch-value-row button{
+
+  background:var(--bg-soft);
+
+  border:0;
+
+  border-radius:9px;
+
+  width:28px;
+  height:28px;
+
+  cursor:pointer;
+
+  color:var(--text-soft);
+
+  font-size:0;
+
+  position:relative;
+
+  opacity:0;
+
+  transition:
+    opacity .2s ease,
+    background .2s ease,
+    transform .2s ease;
+}
+
+
+/* CSS COPY ICON */
+
+.swatch-value-row button::before{
+
+  content:"";
+
+  width:8px;
+  height:9px;
+
+  border:1.4px solid currentColor;
+
+  border-radius:2px;
+
+  position:absolute;
+
+  left:9px;
+  top:10px;
+}
+
+.swatch-value-row button::after{
+
+  content:"";
+
+  width:8px;
+  height:9px;
+
+  border:1.4px solid currentColor;
+
+  border-radius:2px;
+
+  position:absolute;
+
+  left:6px;
+  top:7px;
+
+  background:var(--bg-soft);
+}
+
+.swatch-card:hover .swatch-value-row button{
+  opacity:1;
+}
+
+.swatch-value-row button:hover{
+
+  background:var(--bg-hover);
+
+  color:var(--brand-1);
+
+  transform:scale(1.05);
+}
+
+
+/* ACTIONS */
+
+.swatch-actions{
+
+  display:flex;
+
+  gap:6px;
+
+  margin-top:5px;
+
+  flex-wrap:wrap;
+
+  max-height:0;
+
+  overflow:hidden;
+
+  opacity:0;
+
+  transition:
+    max-height .3s ease,
+    opacity .25s ease;
+}
+
+.swatch-card:hover .swatch-actions{
+
+  max-height:60px;
+
+  opacity:1;
+}
+
+
+/* ADD SWATCH */
+
+.add-swatch{
+
+  flex:1 1 170px;
+
+  min-width:170px;
+
+  min-height:245px;
+
+  border:1.5px dashed var(--border-strong);
+
+  border-radius:24px;
+
+  background:rgba(255,255,255,.14);
+
+  cursor:pointer;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:0;
+
+  color:var(--text-faint);
+
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    transform .25s ease;
+}
+
+
+/* CSS PLUS */
+
+.add-swatch::before,
+.add-swatch::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:18px;
+  height:1.5px;
+
+  background:currentColor;
+
+  border-radius:2px;
+}
+
+.add-swatch::after{
+  transform:rotate(90deg);
+}
+
+.add-swatch{
+  position:relative;
+}
+
+.add-swatch:hover{
+
+  background:var(--bg-elev);
+
+  border-color:var(--brand-3);
+
+  color:var(--brand-1);
+
+  transform:translateY(-3px);
+}
+
+
+/* =========================================================
+   LIBRARY
+   ========================================================= */
+
+.library-controls{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:9px;
+
+  margin-bottom:18px;
+
+  align-items:center;
+}
+
+.library-controls input[type=search]{
+  max-width:280px;
+}
+
+.family-chips{
+
+  display:flex;
+
+  flex-wrap:wrap;
+
+  gap:7px;
+
+  margin-bottom:20px;
+}
+
+.library-count{
+
+  color:var(--text-faint);
+
+  font-size:.82rem;
+
+  margin-bottom:14px;
+}
+
+.library-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(115px,1fr));
+
+  gap:12px;
+}
+
+
+/* MINIMAL COLOR SWATCH */
+
+.lib-swatch{
+
+  position:relative;
+
+  aspect-ratio:1 / 1;
+
+  border-radius:18px;
+
+  overflow:hidden;
+
+  border:1px solid var(--border);
+
+  background:var(--bg-elev);
+
+  cursor:pointer;
+
+  transition:
+    transform .24s cubic-bezier(.2,.8,.2,1),
+    box-shadow .24s ease;
+}
+
+.lib-swatch:hover,
+.lib-swatch:focus-visible{
+
+  transform:
+    translateY(-3px)
+    scale(1.025);
+
+  box-shadow:var(--shadow-md);
+}
+
+.lib-color{
+
+  position:absolute;
+
+  inset:0;
+
+  height:100%;
+}
+
+.lib-info{
+
+  position:absolute;
+
+  left:8px;
+  right:8px;
+  bottom:8px;
+
+  padding:8px 9px;
+
+  border-radius:12px;
+
+  background:rgba(25,22,19,.58);
+
+  backdrop-filter:blur(8px);
+
+  -webkit-backdrop-filter:blur(8px);
+
+  color:#fff;
+
+  opacity:0;
+
+  transform:translateY(5px);
+
+  transition:
+    opacity .2s ease,
+    transform .2s ease;
+}
+
+.lib-swatch:hover .lib-info,
+.lib-swatch:focus-visible .lib-info{
+
+  opacity:1;
+
+  transform:translateY(0);
+}
+
+.lib-name{
+
+  font-size:.73rem;
+
+  font-weight:600;
+
+  white-space:nowrap;
+
+  overflow:hidden;
+
+  text-overflow:ellipsis;
+}
+
+.lib-hex{
+
+  font-size:.66rem;
+
+  opacity:.78;
+
+  font-family:monospace;
+}
+
+.library-loadmore{
+
+  display:flex;
+
+  justify-content:center;
+
+  margin-top:22px;
+}
+
+
+/* =========================================================
+   TEMPLATES
+   ========================================================= */
+
+.template-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(230px,1fr));
+
+  gap:16px;
+}
+
+.template-card{
+
+  padding:17px;
+
+  border-radius:22px;
+}
+
+.template-preview{
+
+  display:flex;
+
+  height:82px;
+
+  border-radius:15px;
+
+  overflow:hidden;
+
+  margin-bottom:13px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,.04);
+}
+
+.template-preview span{
+  flex:1;
+
+  transition:
+    flex .35s ease;
+}
+
+.template-card:hover .template-preview span{
+  flex:1.15;
+}
+
+.template-name{
+
+  font-weight:600;
+
+  margin-bottom:4px;
+}
+
+.template-desc{
+
+  font-size:.8rem;
+
+  color:var(--text-soft);
+
+  margin-bottom:10px;
+
+  line-height:1.5;
+}
+
+
+/* =========================================================
+   COLOR OF THE DAY
+   ========================================================= */
+
+.cod-card{
+
+  display:flex;
+
+  gap:28px;
+
+  align-items:center;
+
+  padding:28px;
+
+  flex-wrap:wrap;
+
+  border-radius:26px;
+}
+
+.cod-swatch{
+
+  width:180px;
+  height:180px;
+
+  border-radius:26px;
+
+  flex-shrink:0;
+
+  box-shadow:var(--shadow-md);
+
+  position:relative;
+
+  overflow:hidden;
+}
+
+.cod-swatch::after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.24),
+      transparent 50%
+    );
+}
+
+.cod-info{
+
+  flex:1;
+
+  min-width:220px;
+}
+
+.cod-values{
+
+  display:flex;
+
+  gap:14px;
+
+  flex-wrap:wrap;
+
+  font-family:monospace;
+
+  font-size:.82rem;
+
+  color:var(--text-soft);
+
+  margin:10px 0 16px;
+}
+
+.cod-personality{
+
+  font-style:italic;
+
+  color:var(--text-soft);
+
+  margin-bottom:10px;
+}
+
+
+/* =========================================================
+   STORIES
+   ========================================================= */
+
+.story-card{
+
+  padding:18px;
+
+  cursor:pointer;
+
+  border-radius:22px;
+}
+
+.story-swatch{
+
+  height:80px;
+
+  border-radius:16px;
+
+  margin-bottom:12px;
+}
+
+.story-body{
+
+  display:none;
+
+  margin-top:10px;
+
+  padding-top:10px;
+
+  border-top:1px solid var(--border);
+
+  font-size:.88rem;
+
+  color:var(--text-soft);
+
+  line-height:1.6;
+
+  animation:fadeUp .35s ease;
+}
+
+.story-body.open{
+  display:block;
+}
+
+
+/* =========================================================
+   FAVORITES
+   ========================================================= */
+
+.fav-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fill,minmax(240px,1fr));
+
+  gap:16px;
+}
+
+.fav-card{
+
+  padding:15px;
+
+  border-radius:22px;
+}
+
+.fav-strip{
+
+  display:flex;
+
+  height:64px;
+
+  border-radius:15px;
+
+  overflow:hidden;
+
+  margin-bottom:11px;
+}
+
+.fav-strip span{
+  flex:1;
+
+  transition:flex .3s ease;
+}
+
+.fav-card:hover .fav-strip span{
+  flex:1.08;
+}
+
+.fav-title-row{
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  margin-bottom:8px;
+}
+
+.fav-name{
+  font-weight:600;
+}
+
+.fav-actions{
+
+  display:flex;
+
+  gap:6px;
+}
+
+.empty-state{
+
+  text-align:center;
+
+  padding:50px 20px;
+
+  color:var(--text-faint);
+}
+
+.empty-state svg{
+
+  margin-bottom:14px;
+
+  opacity:.6;
+}
+
+
+/* =========================================================
+   EXPORT
+   ========================================================= */
+
+.export-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(200px,1fr));
+
+  gap:14px;
+}
+
+.export-card{
+
+  padding:22px;
+
+  text-align:center;
+
+  border-radius:22px;
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease;
+}
+
+.export-card:hover{
+
+  transform:translateY(-3px);
+
+  box-shadow:var(--shadow-md);
+}
+
+.export-icon{
+
+  font-size:0;
+
+  width:42px;
+  height:42px;
+
+  border-radius:14px;
+
+  background:var(--bg-soft);
+
+  margin:0 auto 10px;
+
+  position:relative;
+}
+
+
+/* CSS EXPORT ICON */
+
+.export-icon::before{
+
+  content:"";
+
+  position:absolute;
+
+  width:15px;
+  height:17px;
+
+  border:1.5px solid var(--text-soft);
+
+  border-radius:4px;
+
+  left:13px;
+  top:11px;
+}
+
+.export-icon::after{
+
+  content:"";
+
+  position:absolute;
+
+  width:7px;
+  height:1.5px;
+
+  background:var(--brand-1);
+
+  left:17px;
+  top:20px;
+
+  box-shadow:
+    0 4px 0 var(--brand-1);
+}
+
+.share-row{
+
+  display:flex;
+
+  gap:9px;
+
+  margin-top:20px;
+
+  flex-wrap:wrap;
+}
+
+.share-row input{
+
+  flex:1;
+
+  min-width:200px;
+
+  font-family:monospace;
+}
+
+
+/* =========================================================
+   B&W INTERACTIVE SECTION
+   ========================================================= */
+
+.bw-zone{
+
+  position:relative;
+
+  border-radius:30px;
+
+  padding:74px 20px;
+
+  text-align:center;
+
+  overflow:hidden;
+
+  background:#E5E1DA;
+
+  cursor:pointer;
+
+  border:1px solid var(--border);
+
+  isolation:isolate;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.bw-zone:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:var(--shadow-md);
+}
+
+:root[data-theme="dark"] .bw-zone{
+  background:#292621;
+}
+
+.bw-zone.activated{
+  background:var(--grad-brand);
+}
+
+.bw-letters{
+
+  font-size:clamp(2.4rem,8vw,5rem);
+
+  font-weight:800;
+
+  letter-spacing:.05em;
+
+  color:#858078;
+
+  position:relative;
+
+  z-index:2;
+}
+
+.bw-zone.activated .bw-letters{
+
+  color:#fff;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #F8E6D7,
+      #fff
+    );
+
+  -webkit-background-clip:text;
+
+  background-clip:text;
+}
+
+.bw-letters span{
+
+  display:inline-block;
+
+  transition:color .4s ease;
+}
+
+.bw-zone.activated .bw-letters span{
+
+  animation:
+    bounceLetter .6s ease;
+}
+
+.bw-caption{
+
+  margin-top:14px;
+
+  color:var(--text-faint);
+
+  font-size:.95rem;
+
+  position:relative;
+
+  z-index:2;
+}
+
+.bw-zone.activated .bw-caption{
+
+  color:rgba(255,255,255,.92);
+
+  font-weight:600;
+}
+
+.bw-ripple{
+
+  position:absolute;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.38),
+      rgba(255,255,255,.08) 45%,
+      transparent 70%
+    );
+
+  transform:scale(0);
+
+  pointer-events:none;
+
+  z-index:1;
+}
+
+.bw-ripple.animate{
+  animation:rippleGrow 1.1s ease forwards;
+}
+
+@keyframes rippleGrow{
+
+  to{
+    transform:scale(1);
+    opacity:0;
+  }
+}
+
+.bw-particle{
+
+  position:absolute;
+
+  width:7px;
+  height:7px;
+
+  border-radius:50%;
+
+  background:rgba(255,255,255,.85);
+
+  pointer-events:none;
+
+  z-index:3;
+
+  opacity:0;
+}
+
+.bw-particle.animate{
+
+  animation:
+    particlePop 1s ease forwards;
+}
+
+@keyframes particlePop{
+
+  0%{
+    opacity:1;
+    transform:translate(0,0) scale(1);
+  }
+
+  100%{
+    opacity:0;
+    transform:
+      translate(var(--dx),var(--dy))
+      scale(0);
+  }
+}
+
+
+/* =========================================================
+   KEYBOARD SHORTCUTS
+   ========================================================= */
+
+.kbd{
+
+  background:var(--bg-soft);
+
+  border:1px solid var(--border);
+
+  border-bottom-color:var(--border-strong);
+
+  border-radius:9px;
+
+  padding:3px 8px;
+
+  font-family:monospace;
+
+  font-size:.78rem;
+
+  color:var(--text-soft);
+
+  box-shadow:
+    0 1px 0 var(--border-strong);
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.grid{
+
+  display:grid;
+
+  gap:18px;
+}
+
+.grid-2{
+  grid-template-columns:repeat(2,1fr);
+}
+
+.grid-3{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.grid-4{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.grid-6{
+  grid-template-columns:repeat(6,1fr);
+}
+
+@media(max-width:1000px){
+
+  .grid-4{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid-6{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .grid-3{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:640px){
+
+  .grid-2,
+  .grid-3,
+  .grid-4,
+  .grid-6{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+
+/* =========================================================
+   MASCOT
+   ========================================================= */
+
+.huefy-mascot{
+
+  width:54px;
+  height:54px;
+
+  transition:
+    transform .3s ease;
+}
+
+.huefy-mascot.bounce{
+
+  animation:
+    mascotBounce .6s ease;
+}
+
+@keyframes mascotBounce{
+
+  0%,100%{
+    transform:translateY(0) rotate(0);
+  }
+
+  30%{
+    transform:translateY(-10px) rotate(-7deg);
+  }
+
+  60%{
+    transform:translateY(0) rotate(5deg);
+  }
+}
+
+
+/* =========================================================
+   INDEX PAGE
+   ========================================================= */
+
+.hero-actions .btn{
+  font-size:.9rem;
+}
+
+
+/* =========================================================
+   SOFT "ICON" TREATMENT FOR COMMON EMOJI BUTTONS
+   Prevents colorful emoji from breaking the visual system.
+   ========================================================= */
+
+.palette-toolbar button,
+.swatch-actions button,
+.fav-actions button,
+.library-controls button,
+.export-card button{
+
+  line-height:1;
+}
+
+
+/* Make emoji visually softer where the existing JS/HTML
+   still inserts them. */
+
+.palette-toolbar button::first-letter,
+.swatch-actions button::first-letter,
+.fav-actions button::first-letter{
+
+  filter:grayscale(1);
+
+}
+
+
+/* =========================================================
+   SHUFFLE / GENERATE BUTTON VISUAL
+   ========================================================= */
+
+button[onclick*="shuffle"],
+button[onclick*="generate"],
+button[title*="Shuffle"],
+button[title*="Generate"]{
+
+  position:relative;
+}
+
+
+/* Hide oversized emoji appearance without touching JS text.
+   The text remains accessible to screen readers. */
+
+button[onclick*="shuffle"]{
+  font-size:0;
+}
+
+button[onclick*="shuffle"]::before{
+
+  content:"";
+
+  width:16px;
+  height:16px;
+
+  display:block;
+
+  position:relative;
+
+  background:
+    linear-gradient(
+      45deg,
+      transparent 42%,
+      currentColor 43%,
+      currentColor 57%,
+      transparent 58%
+    );
+
+  border-radius:4px;
+
+  transform:rotate(45deg);
+
+  opacity:.82;
+}
+
+
+/* =========================================================
+   ALL-CARDS / SMALL ACTION BUTTON POLISH
+   ========================================================= */
+
+.swatch-actions .btn,
+.fav-actions .btn{
+
+  border-radius:11px;
+
+  padding:7px 10px;
+
+  font-size:.76rem;
+
+  background:var(--bg-soft);
+
+  color:var(--text-soft);
+
+  border:1px solid transparent;
+}
+
+.swatch-actions .btn:hover,
+.fav-actions .btn:hover{
+
+  background:var(--bg-hover);
+
+  color:var(--text);
+
+  border-color:var(--border);
+}
+
+
+/* =========================================================
+   PALETTE CHANGE ANIMATION
+   ========================================================= */
+
+.palette-strip.palette-changing .swatch-card{
+
+  animation:
+    paletteCardChange .45s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.palette-strip.palette-changing .swatch-card:nth-child(2){
+  animation-delay:.035s;
+}
+
+.palette-strip.palette-changing .swatch-card:nth-child(3){
+  animation-delay:.07s;
+}
+
+.palette-strip.palette-changing .swatch-card:nth-child(4){
+  animation-delay:.105s;
+}
+
+.palette-strip.palette-changing .swatch-card:nth-child(5){
+  animation-delay:.14s;
+}
+
+.palette-strip.palette-changing .swatch-card:nth-child(6){
+  animation-delay:.175s;
+}
+
+@keyframes paletteCardChange{
+
+  0%{
+    opacity:.45;
+    transform:
+      translateY(8px)
+      scale(.97);
+  }
+
+  60%{
+    transform:
+      translateY(-3px)
+      scale(1.015);
+  }
+
+  100%{
+    opacity:1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+
+/* =========================================================
+   SUBTLE HOVER MOTION FOR COLOR CARDS
+   ========================================================= */
+
+.swatch-card .swatch-color{
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+}
+
+.swatch-card:hover .swatch-color{
+  transform:scale(1.018);
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar{
+  width:7px;
+  height:7px;
+}
+
+::-webkit-scrollbar-thumb{
+
+  background:
+    rgba(100,88,75,.28);
+
+  border-radius:999px;
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+  background:
+    rgba(100,88,75,.42);
+}
+
+::-webkit-scrollbar-track{
+  background:transparent;
+}
+
+
+/* =========================================================
+   VISUALLY HIDDEN
+   ========================================================= */
+
+.visually-hidden{
+
+  position:absolute;
+
+  width:1px;
+  height:1px;
+
+  padding:0;
+  margin:-1px;
+
+  overflow:hidden;
+
+  clip:rect(0,0,0,0);
+
+  white-space:nowrap;
+
+  border:0;
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media(max-width:640px){
+
+  .container-huefy{
+    padding:0 16px;
+  }
+
+  .hero{
+    padding:76px 0 58px;
+  }
+
+  .hero-title{
+    font-size:clamp(2.45rem,13vw,4rem);
+  }
+
+  .hero-actions{
+    flex-direction:column;
+
+    align-items:stretch;
+  }
+
+  .hero-actions .btn{
+    width:100%;
+  }
+
+  .palette-strip{
+    gap:12px;
+  }
+
+  .swatch-card{
+    flex:
+      1 1 calc(50% - 8px);
+
+    min-width:
+      calc(50% - 8px);
+  }
+
+  .swatch-color{
+    height:145px;
+  }
+
+  .add-swatch{
+    min-width:
+      calc(50% - 8px);
+
+    min-height:210px;
+  }
+
+  .library-grid{
+    grid-template-columns:
+      repeat(3,1fr);
+
+    gap:9px;
+  }
+
+  .lib-swatch{
+    border-radius:14px;
+  }
+
+  .lib-info{
+    display:none;
+  }
+
+  .cod-card{
+
+    flex-direction:column;
+
+    text-align:center;
+
+    padding:22px;
+  }
+
+  .cod-swatch{
+    width:150px;
+    height:150px;
+  }
+
+  .template-grid{
+    grid-template-columns:1fr;
+  }
+
+  .fav-grid{
+    grid-template-columns:1fr;
+  }
+
+  .export-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .bw-zone{
+    padding:58px 15px;
+    border-radius:24px;
+  }
+
+  .toast-host{
+    left:14px;
+    right:14px;
+    bottom:14px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+
+    animation-duration:.001ms !important;
+
+    animation-iteration-count:1 !important;
+
+    transition-duration:.001ms !important;
+
+    scroll-behavior:auto !important;
+  }
+}
+</style>
+</head>
+<body>
+<header class="huefy-header">
+    <div class="container-huefy">
+      <a href="index.html" class="huefy-logo" aria-label="Huefy home">
+        <svg width="34" height="34" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7C5CFF"/>
+              <stop offset="55%" stop-color="#FF6B9D"/>
+              <stop offset="100%" stop-color="#FFD166"/>
+            </linearGradient>
+          </defs>
+          <circle cx="24" cy="24" r="22" fill="url(#logoGrad)"/>
+          <circle cx="24" cy="24" r="22" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1.5"/>
+          <path d="M15 30c0-7 4-14 9-16 5 2 9 9 9 16a9 9 0 0 1-18 0Z" fill="rgba(255,255,255,.92)"/>
+        </svg>
+        <span>Huefy</span>
+      </a>
+      <nav class="huefy-nav" id="mainNav" aria-label="Primary">
+        <a href="index.html#generator" data-nav="generator">Generator</a>
+        <a href="index.html#library" data-nav="library">Library</a>
+        <a href="index.html#templates" data-nav="templates">Templates</a>
+        <a href="game.html" data-nav="games">Games</a>
+        <a href="labs.html" data-nav="labs">Labs</a>
+        <a href="timeline.html" data-nav="timeline">Timeline</a>
+        <a href="index.html#favorites" data-nav="favorites">Favorites</a>
+        <a href="index.html#export" data-nav="export">Export</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="shortcutsBtn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">?</button>
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">&#127769;</button>
+        <button class="icon-btn nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+      </div>
+    </div>
+  </header>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-blob" style="width:320px;height:320px;background:var(--brand-1);top:-80px;left:-60px;"></div>
+    <div class="hero-blob" style="width:280px;height:280px;background:var(--brand-2);top:20px;right:-60px;animation-delay:2s;"></div>
+    <div class="hero-blob" style="width:240px;height:240px;background:var(--brand-3);bottom:-80px;left:40%;animation-delay:4s;"></div>
+    <div class="container-huefy hero-content">
+      <h1 class="hero-title">Huefy</h1>
+      <p class="hero-subtitle">Find your perfect colors.</p>
+      <p class="hero-desc">Discover, create, customize, save, and share beautiful color palettes.</p>
+      <div class="hero-actions">
+        <button class="btn btn-primary" onclick="document.getElementById('generator').scrollIntoView({behavior:'smooth'})">Generate Palette</button>
+        <a class="btn btn-outline" href="#library">Explore Colors</a>
+        <a class="btn btn-outline" href="game.html">Play Color Games</a>
+        <a class="btn btn-outline" href="labs.html">Open Huefy Labs</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PALETTE GENERATOR -->
+  <section class="section" id="generator">
+    <div class="container-huefy">
+      <h2 class="section-title">Palette Generator</h2>
+      <p class="section-sub">Hit generate, lock the colors you love, drag to reorder, and save when it feels right.</p>
+      <div class="palette-toolbar">
+        <button class="btn btn-primary" id="btnGenerate">&#127922; Generate <span class="kbd" style="margin-left:6px;">Space</span></button>
+        <button class="btn btn-soft" id="btnShuffle">&#128256; Shuffle</button>
+        <button class="btn btn-soft" id="btnAddColor">&#10133; Add Color</button>
+        <button class="btn btn-soft" id="btnReset">&#8635; Reset</button>
+        <button class="btn btn-outline" id="btnSavePalette">&#128190; Save Palette</button>
+        <button class="btn btn-outline" id="btnSharePalette">&#128279; Share</button>
+      </div>
+      <div class="palette-strip" id="paletteStrip" aria-label="Current palette"></div>
+    </div>
+  </section>
+
+  <!-- COLOR OF THE DAY -->
+  <section class="section" id="colorOfDay">
+    <div class="container-huefy">
+      <h2 class="section-title">Color of the Day</h2>
+      <p class="section-sub">A new shade, chosen just for today.</p>
+      <div class="card cod-card" id="codCard"></div>
+    </div>
+  </section>
+
+  <!-- COLOR LIBRARY -->
+  <section class="section" id="library">
+    <div class="container-huefy">
+      <h2 class="section-title">Color Library</h2>
+      <p class="section-sub">1,000 curated colors across 8 families. Search, filter, and add any shade to your palette.</p>
+      <div class="library-controls">
+        <input type="search" id="librarySearch" placeholder="Search by name or HEX..." aria-label="Search colors"/>
+        <button class="btn btn-sm btn-soft" id="clearFilters">Clear Filters</button>
+      </div>
+      <div class="family-chips" id="familyChips" role="group" aria-label="Filter by family"></div>
+      <div class="family-chips" id="shadeChips" role="group" aria-label="Filter by shade"></div>
+      <p class="library-count" id="libraryCount"></p>
+      <div class="library-grid" id="libraryGrid"></div>
+      <div class="library-loadmore">
+        <button class="btn btn-outline" id="btnLoadMore">Show More Colors</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEMPLATES -->
+  <section class="section" id="templates">
+    <div class="container-huefy">
+      <h2 class="section-title">Templates</h2>
+      <p class="section-sub">Ready-made palettes for common moods and projects.</p>
+      <div class="template-grid" id="templateGrid"></div>
+    </div>
+  </section>
+
+  <!-- COLOR STORIES -->
+  <section class="section" id="stories">
+    <div class="container-huefy">
+      <h2 class="section-title">Color Stories</h2>
+      <p class="section-sub">Every shade has a little story. Click a card to read it.</p>
+      <div class="grid grid-4" id="storyGrid"></div>
+    </div>
+  </section>
+
+  <!-- FAVORITES -->
+  <section class="section" id="favorites">
+    <div class="container-huefy">
+      <h2 class="section-title">Favorites</h2>
+      <p class="section-sub">Your saved palettes, right where you left them.</p>
+      <div class="fav-grid" id="favGrid"></div>
+    </div>
+  </section>
+
+  <!-- EXPORT -->
+  <section class="section" id="export">
+    <div class="container-huefy">
+      <h2 class="section-title">Export Tools</h2>
+      <p class="section-sub">Take your current palette anywhere.</p>
+      <div class="export-grid">
+        <div class="card export-card"><div class="export-icon">&#128444;&#65039;</div><h4>PNG</h4><p class="template-desc">Branded image of your palette.</p><button class="btn btn-primary btn-sm" id="exportPNG">Download PNG</button></div>
+        <div class="card export-card"><div class="export-icon">&#127909;</div><h4>GIF</h4><p class="template-desc">Animated, looping palette GIF.</p><button class="btn btn-primary btn-sm" id="exportGIF">Download GIF</button></div>
+        <div class="card export-card"><div class="export-icon">&#127917;</div><h4>CSS</h4><p class="template-desc">CSS custom properties.</p><button class="btn btn-primary btn-sm" id="exportCSS">Download CSS</button></div>
+        <div class="card export-card"><div class="export-icon">&#128196;</div><h4>JSON</h4><p class="template-desc">Machine-readable palette data.</p><button class="btn btn-primary btn-sm" id="exportJSON">Download JSON</button></div>
+        <div class="card export-card"><div class="export-icon">&#128221;</div><h4>TXT</h4><p class="template-desc">Human-readable HEX/RGB/HSL list.</p><button class="btn btn-primary btn-sm" id="exportTXT">Download TXT</button></div>
+      </div>
+      <div class="card" style="padding:20px; margin-top:20px;">
+        <h4 style="margin-bottom:10px;">Share Link</h4>
+        <div class="share-row">
+          <input type="text" id="shareLinkInput" readonly aria-label="Shareable link"/>
+          <button class="btn btn-soft" id="copyShareLink">Copy Link</button>
+          <button class="btn btn-outline" id="webShareBtn">Share&#8230;</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE B&W SECTION -->
+  <section class="section" id="bwSection">
+    <div class="container-huefy">
+      <div class="bw-zone" id="bwZone" role="button" tabindex="0" aria-label="Activate color surprise">
+        <div class="bw-letters" id="bwLetters">
+          <span>B</span><span>&amp;</span><span>W</span>
+        </div>
+        <p class="bw-caption" id="bwCaption">Click to bring the color back.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SAVE PALETTE MODAL -->
+  <div class="huefy-modal-overlay" id="saveModal">
+    <div class="huefy-modal" role="dialog" aria-modal="true" aria-labelledby="saveModalTitle">
+      <button class="huefy-modal-close" aria-label="Close" onclick="closeModal('saveModal')">&times;</button>
+      <h3 id="saveModalTitle">Save Palette</h3>
+      <label for="paletteNameInput">Palette name</label>
+      <input type="text" id="paletteNameInput" placeholder="e.g. Sunset Drive" maxlength="60"/>
+      <button class="btn btn-primary" style="margin-top:16px;" id="confirmSaveBtn">Save</button>
+    </div>
+  </div>
+
+  <!-- STORY MODAL -->
+  <div class="huefy-modal-overlay" id="storyModal">
+    <div class="huefy-modal" role="dialog" aria-modal="true" aria-labelledby="storyModalTitle">
+      <button class="huefy-modal-close" aria-label="Close" onclick="closeModal('storyModal')">&times;</button>
+      <div id="storyModalContent"></div>
+    </div>
+  </div>
+<footer class="huefy-footer">
+    <div class="container-huefy">
+      <div class="huefy-logo" style="font-size:1.05rem;">
+        <svg width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="url(#logoGrad)"/>
+          <path d="M15 30c0-7 4-14 9-16 5 2 9 9 9 16a9 9 0 0 1-18 0Z" fill="rgba(255,255,255,.92)"/>
+        </svg>
+        <span>Huefy</span>
+      </div>
+      <div>Find your perfect colors. Made for people who love color a little too much.</div>
+      <div style="display:flex; gap:14px;">
+        <a href="index.html">Generator</a>
+        <a href="game.html">Games</a>
+        <a href="labs.html">Labs</a>
+        <a href="timeline.html">Timeline</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SHORTCUTS MODAL -->
+  <div class="huefy-modal-overlay" id="shortcutsModal">
+    <div class="huefy-modal" role="dialog" aria-modal="true" aria-labelledby="shortcutsTitle">
+      <button class="huefy-modal-close" aria-label="Close" onclick="closeModal('shortcutsModal')">&times;</button>
+      <h3 id="shortcutsTitle">Keyboard Shortcuts</h3>
+      <p style="display:flex; justify-content:space-between; margin:10px 0;"><span>Generate palette</span><span class="kbd">Space</span></p>
+      <p style="display:flex; justify-content:space-between; margin:10px 0;"><span>Search colors</span><span class="kbd">/</span></p>
+      <p style="display:flex; justify-content:space-between; margin:10px 0;"><span>Close dialog</span><span class="kbd">Esc</span></p>
+      <p style="display:flex; justify-content:space-between; margin:10px 0;"><span>Save palette</span><span class="kbd">Ctrl/Cmd + S</span></p>
+    </div>
+  </div>
+<script>
+/* ===================== HUEFY CORE (shared across pages) ===================== */
+
+/* ---- STORAGE KEYS ---- */
+const LS = {
+  theme: 'huefy-theme',
+  favorites: 'huefy-favorites',
+  highscores: 'huefy-highscores',
+  settings: 'huefy-settings',
+  lastPalette: 'huefy-last-palette',
+  experiments: 'huefy-experiments'
+};
+
+/* ---- COLOR UTILITIES ---- */
+function clamp(v,min,max){return Math.min(max,Math.max(min,v));}
+
+function hexToRgb(hex){
+  hex = ('' + hex).replace('#','').trim();
+  if(hex.length === 3){ hex = hex.split('').map(c=>c+c).join(''); }
+  const num = parseInt(hex,16);
+  if(isNaN(num) || hex.length !== 6) return {r:0,g:0,b:0};
+  return { r:(num>>16)&255, g:(num>>8)&255, b:num&255 };
+}
+function rgbToHex(r,g,b){
+  const h = n => clamp(Math.round(n),0,255).toString(16).padStart(2,'0');
+  return '#' + h(r) + h(g) + h(b);
+}
+function rgbToHsl(r,g,b){
+  r/=255; g/=255; b/=255;
+  const max=Math.max(r,g,b), min=Math.min(r,g,b);
+  let h,s,l=(max+min)/2;
+  if(max===min){ h=s=0; }
+  else{
+    const d = max-min;
+    s = l>0.5 ? d/(2-max-min) : d/(max+min);
+    switch(max){
+      case r: h=(g-b)/d+(g<b?6:0); break;
+      case g: h=(b-r)/d+2; break;
+      case b: h=(r-g)/d+4; break;
+    }
+    h/=6;
+  }
+  return { h: Math.round(h*360), s: Math.round(s*100), l: Math.round(l*100) };
+}
+function hslToRgb(h,s,l){
+  h=((h%360)+360)%360; s=clamp(s,0,100)/100; l=clamp(l,0,100)/100;
+  const c=(1-Math.abs(2*l-1))*s;
+  const x=c*(1-Math.abs((h/60)%2-1));
+  const m=l-c/2;
+  let r=0,g=0,b=0;
+  if(h<60){r=c;g=x;b=0;} else if(h<120){r=x;g=c;b=0;} else if(h<180){r=0;g=c;b=x;}
+  else if(h<240){r=0;g=x;b=c;} else if(h<300){r=x;g=0;b=c;} else {r=c;g=0;b=x;}
+  return { r:Math.round((r+m)*255), g:Math.round((g+m)*255), b:Math.round((b+m)*255) };
+}
+function hexToHsl(hex){ const {r,g,b}=hexToRgb(hex); return rgbToHsl(r,g,b); }
+function hslToHex(h,s,l){ const {r,g,b}=hslToRgb(h,s,l); return rgbToHex(r,g,b); }
+function isValidHex(hex){ return /^#?[0-9a-fA-F]{6}$/.test(hex) || /^#?[0-9a-fA-F]{3}$/.test(hex); }
+function normalizeHex(hex){
+  hex = ('' + hex).trim();
+  if(hex[0] !== '#') hex = '#' + hex;
+  if(hex.length === 4){ hex = '#' + hex.slice(1).split('').map(c=>c+c).join(''); }
+  return hex.toUpperCase();
+}
+function relLuminance(hex){
+  const {r,g,b} = hexToRgb(hex);
+  const chan = v => { v/=255; return v<=0.03928 ? v/12.92 : Math.pow((v+0.055)/1.055,2.4); };
+  return 0.2126*chan(r)+0.7152*chan(g)+0.0722*chan(b);
+}
+function contrastRatio(hex1,hex2){
+  const L1 = relLuminance(hex1), L2 = relLuminance(hex2);
+  const light = Math.max(L1,L2), dark = Math.min(L1,L2);
+  return (light+0.05)/(dark+0.05);
+}
+function colorDistance(hex1,hex2){
+  const a = hexToRgb(hex1), b = hexToRgb(hex2);
+  const dr=a.r-b.r, dg=a.g-b.g, db=a.b-b.b;
+  return Math.sqrt(dr*dr+dg*dg+db*db);
+}
+function hexSimilarity(hex1,hex2){
+  const dist = colorDistance(hex1,hex2);
+  const maxDist = Math.sqrt(255*255*3);
+  return clamp(100 - (dist/maxDist)*100, 0, 100);
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function pick(arr){ return arr[randInt(0,arr.length-1)]; }
+function mixHex(hexA,hexB,pct){
+  pct = clamp(pct,0,100)/100;
+  const a=hexToRgb(hexA), b=hexToRgb(hexB);
+  return rgbToHex(a.r+(b.r-a.r)*pct, a.g+(b.g-a.g)*pct, a.b+(b.b-a.b)*pct);
+}
+
+/* ---- DETERMINISTIC SEEDED RNG (for Color of the Day / era stability) ---- */
+function seededRandom(seed){
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
+function dateSeed(){
+  const d = new Date();
+  return d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate();
+}
+
+/* ---- 1000-COLOR LIBRARY GENERATOR ---- */
+const FAMILIES = [
+  { name:'Red',    hue: 355 },
+  { name:'Orange', hue: 28  },
+  { name:'Yellow', hue: 48  },
+  { name:'Green',  hue: 140 },
+  { name:'Blue',   hue: 212 },
+  { name:'Purple', hue: 265 },
+  { name:'Pink',   hue: 330 },
+  { name:'Brown',  hue: 25  }
+];
+const CATEGORIES = [
+  { name:'Very Light', l:[88,95], s:[25,45], count:16 },
+  { name:'Light',      l:[76,88], s:[35,55], count:16 },
+  { name:'Soft',       l:[64,76], s:[30,50], count:16 },
+  { name:'Medium',     l:[52,64], s:[45,65], count:16 },
+  { name:'Rich',       l:[40,52], s:[55,75], count:15 },
+  { name:'Vibrant',    l:[45,58], s:[80,100],count:16 },
+  { name:'Dark',       l:[24,36], s:[45,70], count:15 },
+  { name:'Very Dark',  l:[10,20], s:[35,60], count:15 }
+];
+const ADJ = ['Electric','Suspicious','Dreamy','Cosmic','Tiny','Midnight','Neon','Vintage','Wild','Lucky','Salty','Sunny','Frosty','Dusty','Sleepy','Rowdy','Velvet','Glossy','Silent','Feral','Retro','Cheerful','Moody','Bright','Muted','Bold','Gentle','Rustic','Whimsical','Sneaky','Ancient','Modern','Tropical','Arctic','Smoky','Juicy','Zesty','Plush','Rare','Secret','Golden','Stormy','Quiet','Vivid','Cozy','Brave','Curious','Lazy','Chill','Fancy'];
+const NOUN = {
+  Red:['Guava','Ember','Tomato','Rocket','Cherry','Lipstick','Fire Truck','Brick','Cardinal','Crimson Wave','Ruby','Salsa','Rose Hip','Candy Apple','Poppy','Blaze','Sunburn','Firecracker','Barn'],
+  Orange:['Apricot','Tangerine','Pumpkin','Marmalade','Sunset','Papaya','Cantaloupe','Mango Tango','Carrot','Amber Glow','Peach Fuzz','Clay Pot','Traffic Cone','Yam','Copper Penny'],
+  Yellow:['Lemon','Banana','Sunflower','Mustard','Duckling','Corn','Honey','Canary','School Bus','Pineapple','Daffodil','Lemonade','Butterscotch','Goldfinch'],
+  Green:['Fern','Basil','Pickle','Alien Juice','Avocado','Mint','Shamrock','Cactus','Seaweed','Kiwi','Pesto','Forest Floor','Lime Fizz','Moss','Jungle Vine'],
+  Blue:['Pool Party','Midnight Soda','Blueberry','Denim','Sky Marble','Lagoon','Sailor','Glacier','Bluebell','Ocean Drift','Storm Cloud','Peacock','Sapphire Pool','Cobalt Note'],
+  Purple:['Cosmic Grape','Lavender Field','Plum','Grape Soda','Amethyst','Orchid','Eggplant','Wisteria','Violet Hour','Galaxy Dust','Mulberry','Royal Cape'],
+  Pink:['CEO of Pink','Bubblegum','Flamingo','Cotton Candy','Grandma\'s Sofa','Blush','Watermelon Cooler','Peony','Salmon Run','Carnation','Strawberry Milk','Taffy'],
+  Brown:['Suspicious Lemon Pie','Cocoa','Chestnut','Cinnamon Bun','Mocha','Saddle Leather','Walnut','Toffee','Root Beer','Pecan','Maple Syrup','Coffee Grounds','Terracotta Pot']
+};
+const PERSONALITIES = [
+  'Loud, friendly, and always five minutes late.',
+  'Quietly confident. Owns the room without trying.',
+  'Shows up uninvited but somehow makes the party better.',
+  'Takes itself very seriously. Please don\'t laugh.',
+  'The friend who remembers your coffee order.',
+  'A little chaotic, mostly lovable.',
+  'Dresses up for occasions that don\'t require it.',
+  'Calm on the outside, wild playlist on the inside.',
+  'Overthinks everything, including its own shade.',
+  'The last one to leave the party, first one to text after.',
+  'Convinced it invented the color wheel.',
+  'Cozy, dependable, allergic to drama.',
+  'Bold decisions, no regrets.',
+  'Whispers instead of talking, somehow louder for it.',
+  'Been around forever, still the coolest in the room.'
+];
+const STORIES = [
+  'Inspired by neon signs reflected on wet streets at 2 AM.',
+  'Found at the bottom of a half-finished lemonade on a July porch.',
+  'What the sky looks like right before it decides to storm.',
+  'Named after a jacket someone wore once and never took off.',
+  'The exact shade of a childhood bedroom nightlight.',
+  'Discovered in the last five minutes of a summer sunset.',
+  'Borrowed from a bowl of fruit that sat out a little too long.',
+  'The color of a mixtape cover nobody remembers making.',
+  'Spotted on a vintage car nobody could afford to fix.',
+  'What nostalgia would look like if you could bottle it.',
+  'The last color left on the palette after a long night of painting.',
+  'A shade that showed up in a dream and refused to leave.',
+  'Pulled from a postcard sent from a place that may not exist.',
+  'The color of the neon sign outside a diner that never closes.',
+  'What static electricity would taste like, probably.'
+];
+
+function buildColorLibrary(){
+  const colors = [];
+  const usedNames = new Set();
+  FAMILIES.forEach(fam=>{
+    let catIndex = 0;
+    CATEGORIES.forEach(cat=>{
+      for(let i=0;i<cat.count;i++){
+        const hueJitter = (fam.name==='Brown') ? randInt(-6,6) : randInt(-10,10);
+        const hue = fam.hue + hueJitter + (i%3===0?randInt(-4,4):0);
+        const sat = cat.name==='Very Dark' && fam.name==='Brown' ? randInt(cat.s[0],cat.s[1])*0.8 : randInt(cat.s[0],cat.s[1]);
+        const light = randInt(cat.l[0],cat.l[1]);
+        const hex = hslToHex(((hue%360)+360)%360, sat, light);
+        let name;
+        let attempts = 0;
+        do {
+          name = `${pick(ADJ)} ${pick(NOUN[fam.name])}`;
+          attempts++;
+        } while(usedNames.has(name) && attempts < 8);
+        usedNames.add(name);
+        colors.push({
+          name,
+          hex,
+          family: fam.name,
+          category: cat.name,
+          personality: pick(PERSONALITIES),
+          story: pick(STORIES)
+        });
+      }
+      catIndex++;
+    });
+  });
+  return colors;
+}
+const HUEFY_COLORS = buildColorLibrary(); // 1000 colors
+
+/* ---- COLOR OF THE DAY (deterministic) ---- */
+function getColorOfDay(){
+  const seed = dateSeed();
+  const idx = Math.floor(seededRandom(seed) * HUEFY_COLORS.length);
+  return HUEFY_COLORS[idx];
+}
+
+/* ---- THEME ---- */
+function initTheme(){
+  const saved = localStorage.getItem(LS.theme);
+  const theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  return theme;
+}
+function toggleTheme(){
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem(LS.theme, next);
+  updateThemeIcon();
+}
+function updateThemeIcon(){
+  const btn = document.getElementById('themeToggle');
+  if(!btn) return;
+  const cur = document.documentElement.getAttribute('data-theme');
+  btn.innerHTML = cur === 'dark' ? '&#9728;&#65039;' : '&#127769;';
+  btn.setAttribute('aria-label', cur === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+}
+
+/* ---- TOASTS ---- */
+function ensureToastHost(){
+  let host = document.getElementById('toastHost');
+  if(!host){
+    host = document.createElement('div');
+    host.id = 'toastHost';
+    host.className = 'toast-host';
+    host.setAttribute('aria-live','polite');
+    document.body.appendChild(host);
+  }
+  return host;
+}
+function toast(msg, icon){
+  const host = ensureToastHost();
+  const t = document.createElement('div');
+  t.className = 'huefy-toast';
+  t.innerHTML = `<span class="toast-icon">${icon || '&#10003;'}</span><span>${msg}</span>`;
+  host.appendChild(t);
+  requestAnimationFrame(()=> t.classList.add('show'));
+  setTimeout(()=>{
+    t.classList.remove('show');
+    setTimeout(()=> t.remove(), 300);
+  }, 2600);
+}
+
+/* ---- CLIPBOARD ---- */
+async function copyText(text, label){
+  try{
+    await navigator.clipboard.writeText(text);
+    toast(label || 'Copied!');
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try{ document.execCommand('copy'); toast(label || 'Copied!'); } catch(err){ toast('Copy failed'); }
+    ta.remove();
+  }
+}
+
+/* ---- FAVORITES ---- */
+function getFavorites(){
+  try{ return JSON.parse(localStorage.getItem(LS.favorites)) || []; }catch(e){ return []; }
+}
+function saveFavorites(list){ localStorage.setItem(LS.favorites, JSON.stringify(list)); }
+function addFavorite(name, colors){
+  const list = getFavorites();
+  list.unshift({ id: Date.now().toString(36), name: sanitizeText(name || 'Untitled Palette'), colors: colors.slice(), created: Date.now() });
+  saveFavorites(list);
+  return list;
+}
+function deleteFavorite(id){
+  saveFavorites(getFavorites().filter(f=>f.id!==id));
+}
+function renameFavorite(id, newName){
+  const list = getFavorites();
+  const f = list.find(x=>x.id===id);
+  if(f) f.name = sanitizeText(newName);
+  saveFavorites(list);
+}
+
+/* ---- HIGH SCORES ---- */
+function getHighScores(){
+  try{ return JSON.parse(localStorage.getItem(LS.highscores)) || {}; }catch(e){ return {}; }
+}
+function setHighScore(game, score){
+  const scores = getHighScores();
+  if(!scores[game] || score > scores[game]) { scores[game] = score; localStorage.setItem(LS.highscores, JSON.stringify(scores)); return true; }
+  return false;
+}
+
+/* ---- SANITIZATION ---- */
+function sanitizeText(str){
+  return ('' + str).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c])).slice(0,80);
+}
+
+/* ---- EXPORTS: PNG ---- */
+function exportPaletteAsPNG(colors, filename){
+  const w = 900, headerH = 90, swatchH = 260;
+  const canvas = document.createElement('canvas');
+  canvas.width = w; canvas.height = headerH + swatchH;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,canvas.height);
+  ctx.fillStyle = '#111827';
+  ctx.font = '700 28px sans-serif';
+  ctx.fillText('Huefy', 24, 42);
+  ctx.font = '400 14px sans-serif';
+  ctx.fillStyle = '#6b7280';
+  ctx.fillText('huefy — find your perfect colors', 24, 66);
+  const sw = w / colors.length;
+  colors.forEach((hex,i)=>{
+    ctx.fillStyle = hex;
+    ctx.fillRect(i*sw, headerH, sw, swatchH - 40);
+    ctx.fillStyle = contrastRatio(hex,'#000000') > contrastRatio(hex,'#ffffff') ? '#000000' : '#ffffff';
+    ctx.font = '600 14px monospace';
+    ctx.fillText(hex.toUpperCase(), i*sw + 10, headerH + swatchH - 55);
+  });
+  ctx.fillStyle = '#f3f4f6';
+  ctx.fillRect(0, headerH + swatchH - 40, w, 40);
+  colors.forEach((hex,i)=>{
+    ctx.fillStyle = '#374151';
+    ctx.font = '500 12px monospace';
+    ctx.fillText(hex.toUpperCase(), i*sw + 10, headerH + swatchH - 14);
+  });
+  const link = document.createElement('a');
+  link.download = (filename || 'huefy-palette') + '.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
+/* ---- EXPORTS: CSS / JSON / TXT ---- */
+function paletteToCSS(colors){
+  let out = ':root {\n';
+  colors.forEach((hex,i)=> out += `  --color-${i+1}: ${hex.toUpperCase()};\n`);
+  out += '}\n';
+  return out;
+}
+function paletteToJSON(colors){
+  return JSON.stringify({ palette: colors.map(c=>c.toUpperCase()) }, null, 2);
+}
+function paletteToTXT(colors){
+  let out = 'Huefy Palette\n=============\n\n';
+  colors.forEach((hex,i)=>{
+    const rgb = hexToRgb(hex); const hsl = hexToHsl(hex);
+    out += `Color ${i+1}\n  HEX: ${hex.toUpperCase()}\n  RGB: rgb(${rgb.r}, ${rgb.g}, ${rgb.b})\n  HSL: hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)\n\n`;
+  });
+  return out;
+}
+function downloadTextFile(content, filename, mime){
+  const blob = new Blob([content], { type: mime || 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ---- MINIMAL GIF89a ENCODER (no external library) ---- */
+/* Simple LZW-based GIF encoder producing an animated, looping GIF from RGB frames. */
+function GifWriter(){
+  this.bytes = [];
+}
+GifWriter.prototype.writeByte = function(b){ this.bytes.push(b & 0xFF); };
+GifWriter.prototype.writeBytes = function(arr){ for(let i=0;i<arr.length;i++) this.writeByte(arr[i]); };
+GifWriter.prototype.writeShort = function(s){ this.writeByte(s & 0xFF); this.writeByte((s>>8)&0xFF); };
+GifWriter.prototype.writeString = function(s){ for(let i=0;i<s.length;i++) this.writeByte(s.charCodeAt(i)); };
+
+function lzwEncode(minCodeSize, pixels){
+  const clearCode = 1 << minCodeSize;
+  const eoiCode = clearCode + 1;
+  let codeSize = minCodeSize + 1;
+  let nextCode = eoiCode + 1;
+  let dict = {};
+  const resetDict = () => { dict = {}; for(let i=0;i<clearCode;i++) dict[String.fromCharCode(i)] = i; nextCode = eoiCode + 1; codeSize = minCodeSize + 1; };
+  resetDict();
+  const output = [];
+  let curBits = 0, curVal = 0;
+  const emit = (code) => {
+    curVal |= (code << curBits);
+    curBits += codeSize;
+    while(curBits >= 8){ output.push(curVal & 0xFF); curVal >>= 8; curBits -= 8; }
+  };
+  emit(clearCode);
+  let w = String.fromCharCode(pixels[0]);
+  for(let i=1;i<pixels.length;i++){
+    const k = String.fromCharCode(pixels[i]);
+    const wk = w + k;
+    if(dict.hasOwnProperty(wk)){ w = wk; }
+    else{
+      emit(dict[w]);
+      dict[wk] = nextCode++;
+      if(nextCode > (1 << codeSize) && codeSize < 12) codeSize++;
+      if(nextCode >= 4096){ emit(clearCode); resetDict(); }
+      w = k;
+    }
+  }
+  emit(dict[w]);
+  emit(eoiCode);
+  if(curBits > 0){ output.push(curVal & 0xFF); }
+  return output;
+}
+
+function buildPaletteTable(colorList){
+  // colorList: array of [r,g,b]; pad to power of 2, max 256
+  let size = 2;
+  while(size < colorList.length) size *= 2;
+  size = Math.min(size, 256);
+  const table = [];
+  for(let i=0;i<size;i++){
+    table.push(colorList[i] || [0,0,0]);
+  }
+  return table;
+}
+
+function encodeGif(width, height, frames, delayCs, globalPaletteRgb){
+  // frames: array of Uint8Array of indices (length w*h) matching globalPaletteRgb
+  const gw = new GifWriter();
+  const table = buildPaletteTable(globalPaletteRgb);
+  const bitsNeeded = Math.max(2, Math.ceil(Math.log2(table.length)));
+  gw.writeString('GIF89a');
+  gw.writeShort(width); gw.writeShort(height);
+  const gctFlag = 1, colorRes = 7, sortFlag = 0;
+  const gctSizeField = bitsNeeded - 1;
+  const packed = (gctFlag<<7) | (colorRes<<4) | (sortFlag<<3) | gctSizeField;
+  gw.writeByte(packed);
+  gw.writeByte(0); // bg color index
+  gw.writeByte(0); // pixel aspect ratio
+  table.forEach(c => { gw.writeByte(c[0]); gw.writeByte(c[1]); gw.writeByte(c[2]); });
+  // Netscape looping extension
+  gw.writeByte(0x21); gw.writeByte(0xFF); gw.writeByte(11);
+  gw.writeString('NETSCAPE2.0');
+  gw.writeByte(3); gw.writeByte(1); gw.writeShort(0); gw.writeByte(0);
+  frames.forEach(indices=>{
+    gw.writeByte(0x21); gw.writeByte(0xF9); gw.writeByte(4);
+    gw.writeByte(0x04); // disposal: restore to background
+    gw.writeShort(delayCs);
+    gw.writeByte(0); gw.writeByte(0);
+    gw.writeByte(0x2C);
+    gw.writeShort(0); gw.writeShort(0);
+    gw.writeShort(width); gw.writeShort(height);
+    gw.writeByte(0);
+    const minCodeSize = bitsNeeded;
+    gw.writeByte(minCodeSize);
+    const lzwBytes = lzwEncode(minCodeSize, indices);
+    let idx = 0;
+    while(idx < lzwBytes.length){
+      const chunk = lzwBytes.slice(idx, idx+255);
+      gw.writeByte(chunk.length);
+      gw.writeBytes(chunk);
+      idx += 255;
+    }
+    gw.writeByte(0);
+  });
+  gw.writeByte(0x3B);
+  return new Uint8Array(gw.bytes);
+}
+
+function exportPaletteAsGIF(colors, opts){
+  opts = opts || {};
+  const width = 480, height = 280;
+  const frameDelayCs = opts.frameDelayCs || 60; // in 1/100s
+  const transitionSteps = opts.steps || 8;
+  // Build a shared 256-color-safe palette by quantizing each swatch + transitions to nearest of a fixed web-safe-ish set
+  const paletteRgb = [];
+  const paletteMap = new Map();
+  const key = (r,g,b)=> `${r},${g},${b}`;
+  function addColor(r,g,b){
+    r = Math.round(r/17)*17; g = Math.round(g/17)*17; b = Math.round(b/17)*17; // 6x6x6-ish quantize (like web-safe)
+    const k = key(r,g,b);
+    if(!paletteMap.has(k) && paletteRgb.length < 250){
+      paletteMap.set(k, paletteRgb.length);
+      paletteRgb.push([r,g,b]);
+    }
+    return paletteMap.has(k) ? paletteMap.get(k) : 0;
+  }
+  const frames = [];
+  const n = colors.length;
+  const barW = Math.floor(width / n);
+  for(let step=0; step<=transitionSteps; step++){
+    const t = step / transitionSteps;
+    const indices = new Uint8Array(width*height);
+    for(let cIdx=0; cIdx<n; cIdx++){
+      const fromHex = colors[cIdx];
+      const toHex = colors[(cIdx+1)%n];
+      const mixed = mixHex(fromHex, toHex, t*100*0.15); // subtle drift each frame
+      const {r,g,b} = hexToRgb(mixed);
+      const paletteIndex = addColor(r,g,b);
+      for(let y=0;y<height-36;y++){
+        for(let x=cIdx*barW; x<Math.min((cIdx+1)*barW, width); x++){
+          indices[y*width+x] = paletteIndex;
+        }
+      }
+    }
+    // bottom label strip uses a fixed near-white / near-black
+    const bg = addColor(255,255,255);
+    for(let y=height-36;y<height;y++){
+      for(let x=0;x<width;x++) indices[y*width+x] = bg;
+    }
+    frames.push(indices);
+  }
+  const gifBytes = encodeGif(width, height, frames, frameDelayCs, paletteRgb);
+  const blob = new Blob([gifBytes], { type: 'image/gif' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'huefy-palette.gif';
+  a.click();
+  setTimeout(()=> URL.revokeObjectURL(url), 4000);
+}
+
+/* ---- REDUCED MOTION HELPER ---- */
+function prefersReducedMotion(){
+  return window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+/* ===================== SHARED UI WIRING ===================== */
+function openModal(id){ const m=document.getElementById(id); if(m){ m.classList.add('open'); const f=m.querySelector('input,button,select,textarea'); if(f) f.focus(); } }
+function closeModal(id){ const m=document.getElementById(id); if(m) m.classList.remove('open'); }
+document.addEventListener('click', (e)=>{
+  if(e.target.classList && e.target.classList.contains('huefy-modal-overlay')){ e.target.classList.remove('open'); }
+});
+
+function initSharedChrome(activeKey){
+  initTheme();
+  updateThemeIcon();
+  document.getElementById('themeToggle')?.addEventListener('click', toggleTheme);
+  document.getElementById('shortcutsBtn')?.addEventListener('click', ()=> openModal('shortcutsModal'));
+  const navToggle = document.getElementById('navToggle');
+  const nav = document.getElementById('mainNav');
+  navToggle?.addEventListener('click', ()=>{
+    const open = nav.classList.toggle('mobile-open');
+    navToggle.setAttribute('aria-expanded', open ? 'true':'false');
+  });
+  if(activeKey){
+    document.querySelectorAll(`[data-nav="${activeKey}"]`).forEach(a=> a.classList.add('active'));
+  }
+  document.addEventListener('keydown', (e)=>{
+    if(e.key === 'Escape'){
+      document.querySelectorAll('.huefy-modal-overlay.open').forEach(m=> m.classList.remove('open'));
+    }
+  });
+}
+/* ===================== INDEX PAGE STATE ===================== */
+let palette = []; // array of { hex, locked }
+let libraryFilters = { family: null, shade: null, query: '' };
+let libraryVisibleCount = 60;
+const LIBRARY_PAGE_SIZE = 60;
+
+const TEMPLATES = [
+  { name:'Sunset Drive', colors:['#FF6B6B','#FF9E5E','#FFD166','#FF8FB1','#845EC2'] },
+  { name:'Ocean Calm', colors:['#0B3D91','#1E88A8','#28D9C5','#A0E7E5','#DDFBFF'] },
+  { name:'Forest Walk', colors:['#1B4332','#2D6A4F','#40916C','#95D5B2','#D8F3DC'] },
+  { name:'Retro Diner', colors:['#F72585','#7209B7','#3A0CA3','#4361EE','#4CC9F0'] },
+  { name:'Desert Bloom', colors:['#E76F51','#F4A261','#E9C46A','#2A9D8F','#264653'] },
+  { name:'Minimal Mono', colors:['#0D0D0D','#3A3A3A','#7A7A7A','#BEBEBE','#F5F5F5'] },
+  { name:'Candy Pop', colors:['#FF6FB0','#FFD3E0','#FFF176','#7BE0AD','#7EC8E3'] },
+  { name:'Corporate Trust', colors:['#0A2540','#1B4965','#5FA8D3','#BEE9E8','#F7F9FB'] }
+];
+
+/* ---- PALETTE ---- */
+function randomPaletteColor(){
+  return HUEFY_COLORS[randInt(0,HUEFY_COLORS.length-1)].hex;
+}
+function initPalette(fromUrlOrStorage){
+  if(fromUrlOrStorage && fromUrlOrStorage.length){
+    palette = fromUrlOrStorage.map(hex=>({ hex, locked:false }));
+  } else {
+    const saved = localStorage.getItem(LS.lastPalette);
+    if(saved){
+      try{ palette = JSON.parse(saved); }catch(e){ palette = null; }
+    }
+    if(!palette || !palette.length){
+      palette = Array.from({length:6}, ()=> ({ hex: randomPaletteColor(), locked:false }));
+    }
+  }
+  persistPalette();
+  renderPalette();
+}
+function persistPalette(){
+  localStorage.setItem(LS.lastPalette, JSON.stringify(palette));
+}
+function generatePalette(){
+  palette = palette.map(c => c.locked ? c : { hex: randomPaletteColor(), locked:false });
+  persistPalette();
+  renderPalette(true);
+  bounceMascotToast('Palette generated!');
+}
+function shufflePalette(){
+  const unlockedIdx = palette.map((c,i)=>c.locked?null:i).filter(i=>i!==null);
+  const unlockedVals = unlockedIdx.map(i=>palette[i]);
+  for(let i=unlockedVals.length-1;i>0;i--){ const j=randInt(0,i); [unlockedVals[i],unlockedVals[j]]=[unlockedVals[j],unlockedVals[i]]; }
+  unlockedIdx.forEach((idx,k)=> palette[idx]=unlockedVals[k]);
+  persistPalette(); renderPalette(true);
+  toast('Shuffled!');
+}
+function resetPalette(){
+  palette = Array.from({length:6}, ()=> ({ hex: randomPaletteColor(), locked:false }));
+  persistPalette(); renderPalette(true);
+  toast('Palette reset');
+}
+function addColorToPaletteRandom(){
+  if(palette.length >= 10){ toast('Max 10 colors reached'); return; }
+  palette.push({ hex: randomPaletteColor(), locked:false });
+  persistPalette(); renderPalette(true);
+}
+function addSpecificColor(hex){
+  if(palette.length >= 10){ toast('Max 10 colors — remove one first'); return; }
+  palette.push({ hex: normalizeHex(hex), locked:false });
+  persistPalette(); renderPalette(true);
+  flyToPalette();
+  toast('Color added!');
+}
+function removeColorAt(i){
+  if(palette.length <= 2){ toast('Keep at least 2 colors'); return; }
+  palette.splice(i,1); persistPalette(); renderPalette(true);
+}
+function toggleLockAt(i){ palette[i].locked = !palette[i].locked; persistPalette(); renderPalette(); }
+
+function renderPalette(animate){
+  const strip = document.getElementById('paletteStrip');
+  strip.innerHTML = '';
+  palette.forEach((c,i)=>{
+    const rgb = hexToRgb(c.hex); const hsl = hexToHsl(c.hex);
+    const textColor = contrastRatio(c.hex,'#000') > contrastRatio(c.hex,'#fff') ? '#000' : '#fff';
+    const card = document.createElement('div');
+    card.className = 'swatch-card' + (animate ? ' pop-in' : '');
+    card.style.animationDelay = (i*0.03)+'s';
+    card.draggable = true;
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="swatch-color" style="background:${c.hex}; color:${textColor};">
+        <span class="drag-handle" aria-hidden="true" style="color:${textColor}">&#9776;</span>
+        <div style="display:flex; gap:6px;">
+          <button class="swatch-lock" aria-label="${c.locked?'Unlock':'Lock'} color" title="${c.locked?'Unlock':'Lock'}">${c.locked?'&#128274;':'&#128275;'}</button>
+          <button class="swatch-remove" aria-label="Remove color" title="Remove">&times;</button>
+        </div>
+      </div>
+      <div class="swatch-body">
+        <div class="swatch-name">${sanitizeText(nameForHex(c.hex))}</div>
+        <div class="swatch-value-row"><span>${c.hex.toUpperCase()}</span><button data-copy="hex">Copy</button></div>
+        <div class="swatch-value-row"><span>rgb(${rgb.r}, ${rgb.g}, ${rgb.b})</span><button data-copy="rgb">Copy</button></div>
+        <div class="swatch-value-row"><span>hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)</span><button data-copy="hsl">Copy</button></div>
+        <div class="swatch-actions">
+          <input type="color" value="${c.hex}" aria-label="Pick color" data-role="picker"/>
+          <button class="btn btn-sm btn-soft" data-role="story">Story</button>
+        </div>
+      </div>`;
+    // wire events
+    card.querySelector('.swatch-lock').onclick = ()=> toggleLockAt(i);
+    card.querySelector('.swatch-remove').onclick = ()=> removeColorAt(i);
+    card.querySelector('[data-copy="hex"]').onclick = ()=> copyText(c.hex.toUpperCase(),'Copied HEX!');
+    card.querySelector('[data-copy="rgb"]').onclick = ()=> copyText(`rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`,'Copied RGB!');
+    card.querySelector('[data-copy="hsl"]').onclick = ()=> copyText(`hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`,'Copied HSL!');
+    card.querySelector('[data-role="picker"]').oninput = (e)=>{ palette[i].hex = normalizeHex(e.target.value); persistPalette(); renderPalette(); };
+    card.querySelector('[data-role="story"]').onclick = ()=> showStoryFor(c.hex);
+    card.addEventListener('dragstart', ()=>{ card.classList.add('dragging'); });
+    card.addEventListener('dragend', ()=>{ card.classList.remove('dragging'); persistPalette(); });
+    strip.appendChild(card);
+  });
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-swatch'; addBtn.setAttribute('aria-label','Add color');
+  addBtn.innerHTML = '+';
+  addBtn.onclick = addColorToPaletteRandom;
+  if(palette.length < 10) strip.appendChild(addBtn);
+  updateShareLink();
+}
+
+function setupDragAndDrop(){
+  const strip = document.getElementById('paletteStrip');
+  strip.addEventListener('dragover', (e)=>{
+    e.preventDefault();
+    const dragging = strip.querySelector('.dragging');
+    if(!dragging) return;
+    const afterEl = getDragAfterElement(strip, e.clientX);
+    if(afterEl == null){ strip.insertBefore(dragging, strip.querySelector('.add-swatch')); }
+    else{ strip.insertBefore(dragging, afterEl); }
+  });
+  strip.addEventListener('drop', ()=>{
+    const cards = [...strip.querySelectorAll('.swatch-card')];
+    const newOrder = cards.map(c => palette[parseInt(c.dataset.index)]);
+    palette = newOrder;
+    persistPalette();
+    renderPalette();
+  });
+}
+function getDragAfterElement(container, x){
+  const els = [...container.querySelectorAll('.swatch-card:not(.dragging)')];
+  return els.reduce((closest, child)=>{
+    const box = child.getBoundingClientRect();
+    const offset = x - box.left - box.width/2;
+    if(offset < 0 && offset > closest.offset){ return { offset, element: child }; }
+    return closest;
+  }, { offset: -Infinity }).element;
+}
+
+function nameForHex(hex){
+  let best = HUEFY_COLORS[0], bestDist = Infinity;
+  for(const c of HUEFY_COLORS){ const d = colorDistance(hex,c.hex); if(d<bestDist){ bestDist=d; best=c; } }
+  return best.name;
+}
+function closestLibraryColor(hex){
+  let best = HUEFY_COLORS[0], bestDist = Infinity;
+  for(const c of HUEFY_COLORS){ const d = colorDistance(hex,c.hex); if(d<bestDist){ bestDist=d; best=c; } }
+  return best;
+}
+function showStoryFor(hex){
+  const c = closestLibraryColor(hex);
+  document.getElementById('storyModalContent').innerHTML = `
+    <div style="height:90px;border-radius:12px;background:${c.hex};margin-bottom:14px;"></div>
+    <h3>${sanitizeText(c.name)}</h3>
+    <p style="color:var(--text-soft); font-family:monospace; margin:6px 0;">${c.hex.toUpperCase()} &middot; ${c.family} &middot; ${c.category}</p>
+    <p style="font-style:italic; margin:10px 0;">"${sanitizeText(c.personality)}"</p>
+    <p style="color:var(--text-soft);">${sanitizeText(c.story)}</p>`;
+  openModal('storyModal');
+}
+
+function flyToPalette(){
+  // simple visual acknowledgement via mascot bounce on generator button
+  const btn = document.getElementById('btnGenerate');
+  btn.classList.add('glow-pulse');
+  setTimeout(()=> btn.classList.remove('glow-pulse'), 700);
+}
+function bounceMascotToast(msg){
+  toast(msg);
+}
+
+/* ---- LIBRARY ---- */
+function renderFamilyChips(){
+  const wrap = document.getElementById('familyChips');
+  wrap.innerHTML = '<button class="chip active" data-family="">All Families</button>' +
+    FAMILIES.map(f=> `<button class="chip" data-family="${f.name}">${f.name}</button>`).join('');
+  wrap.querySelectorAll('.chip').forEach(chip=>{
+    chip.onclick = ()=>{
+      wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      libraryFilters.family = chip.dataset.family || null;
+      libraryVisibleCount = LIBRARY_PAGE_SIZE;
+      renderLibrary();
+    };
+  });
+}
+function renderShadeChips(){
+  const wrap = document.getElementById('shadeChips');
+  wrap.innerHTML = '<button class="chip active" data-shade="">All Shades</button>' +
+    CATEGORIES.map(c=> `<button class="chip" data-shade="${c.name}">${c.name}</button>`).join('');
+  wrap.querySelectorAll('.chip').forEach(chip=>{
+    chip.onclick = ()=>{
+      wrap.querySelectorAll('.chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      libraryFilters.shade = chip.dataset.shade || null;
+      libraryVisibleCount = LIBRARY_PAGE_SIZE;
+      renderLibrary();
+    };
+  });
+}
+function getFilteredLibrary(){
+  const q = libraryFilters.query.trim().toLowerCase();
+  return HUEFY_COLORS.filter(c=>{
+    if(libraryFilters.family && c.family !== libraryFilters.family) return false;
+    if(libraryFilters.shade && c.category !== libraryFilters.shade) return false;
+    if(q && !(c.name.toLowerCase().includes(q) || c.hex.toLowerCase().includes(q.replace('#','')))) return false;
+    return true;
+  });
+}
+function renderLibrary(){
+  const filtered = getFilteredLibrary();
+  document.getElementById('libraryCount').textContent = `${filtered.length.toLocaleString()} colors found`;
+  const grid = document.getElementById('libraryGrid');
+  const visible = filtered.slice(0, libraryVisibleCount);
+  grid.innerHTML = visible.map(c=>{
+    const textColor = contrastRatio(c.hex,'#000')>contrastRatio(c.hex,'#fff') ? '#000':'#fff';
+    return `<button class="lib-swatch" data-hex="${c.hex}" aria-label="${sanitizeText(c.name)}, ${c.hex}">
+      <div class="lib-color" style="background:${c.hex};"></div>
+      <div class="lib-info">
+        <div class="lib-name">${sanitizeText(c.name)}</div>
+        <div class="lib-hex">${c.hex.toUpperCase()}</div>
+      </div>
+    </button>`;
+  }).join('');
+  grid.querySelectorAll('.lib-swatch').forEach(el=>{
+    el.onclick = ()=> addSpecificColor(el.dataset.hex);
+  });
+  document.getElementById('btnLoadMore').style.display = libraryVisibleCount >= filtered.length ? 'none' : 'inline-flex';
+}
+
+/* ---- TEMPLATES ---- */
+function renderTemplates(){
+  const grid = document.getElementById('templateGrid');
+  grid.innerHTML = TEMPLATES.map((t,i)=>`
+    <div class="card template-card">
+      <div class="template-preview">${t.colors.map(h=>`<span style="background:${h}"></span>`).join('')}</div>
+      <div class="template-name">${sanitizeText(t.name)}</div>
+      <div class="template-desc">${t.colors.map(h=>h.toUpperCase()).join(' · ')}</div>
+      <button class="btn btn-sm btn-primary" data-idx="${i}">Use Template</button>
+    </div>`).join('');
+  grid.querySelectorAll('button[data-idx]').forEach(btn=>{
+    btn.onclick = ()=>{
+      const t = TEMPLATES[btn.dataset.idx];
+      palette = t.colors.map(hex=>({ hex, locked:false }));
+      persistPalette(); renderPalette(true);
+      document.getElementById('generator').scrollIntoView({behavior:'smooth'});
+      toast('Template applied!');
+    };
+  });
+}
+
+/* ---- COLOR OF THE DAY ---- */
+function renderColorOfDay(){
+  const c = getColorOfDay();
+  const rgb = hexToRgb(c.hex); const hsl = hexToHsl(c.hex);
+  document.getElementById('codCard').innerHTML = `
+    <div class="cod-swatch" style="background:${c.hex};"></div>
+    <div class="cod-info">
+      <h3>${sanitizeText(c.name)}</h3>
+      <div class="cod-values">
+        <span>${c.hex.toUpperCase()}</span><span>rgb(${rgb.r}, ${rgb.g}, ${rgb.b})</span><span>hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)</span>
+      </div>
+      <p class="cod-personality">"${sanitizeText(c.personality)}"</p>
+      <p style="color:var(--text-soft); margin-bottom:16px;">${sanitizeText(c.story)}</p>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="codAdd">Add to Palette</button>
+        <button class="btn btn-soft btn-sm" id="codCopy">Copy HEX</button>
+      </div>
+    </div>`;
+  document.getElementById('codAdd').onclick = ()=> addSpecificColor(c.hex);
+  document.getElementById('codCopy').onclick = ()=> copyText(c.hex.toUpperCase(),'Copied HEX!');
+}
+
+/* ---- STORIES SECTION (featured cards) ---- */
+function renderStories(){
+  const seed = dateSeed();
+  const featured = [];
+  for(let i=0;i<4;i++){
+    const idx = Math.floor(seededRandom(seed+i*37) * HUEFY_COLORS.length);
+    featured.push(HUEFY_COLORS[idx]);
+  }
+  const grid = document.getElementById('storyGrid');
+  grid.innerHTML = featured.map((c,i)=>`
+    <div class="card story-card" data-idx="${i}">
+      <div class="story-swatch" style="background:${c.hex}"></div>
+      <div class="lib-name">${sanitizeText(c.name)}</div>
+      <div class="lib-hex">${c.hex.toUpperCase()}</div>
+      <div class="story-body" id="storyBody${i}">
+        <p style="font-style:italic; margin-bottom:8px;">"${sanitizeText(c.personality)}"</p>
+        <p>${sanitizeText(c.story)}</p>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('.story-card').forEach(card=>{
+    card.onclick = ()=>{
+      const body = card.querySelector('.story-body');
+      body.classList.toggle('open');
+    };
+  });
+}
+
+/* ---- FAVORITES ---- */
+function renderFavorites(){
+  const list = getFavorites();
+  const grid = document.getElementById('favGrid');
+  if(!list.length){
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">
+      <svg width="64" height="64" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7.5-4.6-10-9.3C.5 8.1 2.4 4.5 6 4.5c2 0 3.4 1.1 4 2.2.6-1.1 2-2.2 4-2.2 3.6 0 5.5 3.6 4 7.2C19.5 16.4 12 21 12 21Z" stroke="currentColor" stroke-width="1.5"/></svg>
+      <p>No favorites yet. Save a palette to see it here.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(f=>`
+    <div class="card fav-card" data-id="${f.id}">
+      <div class="fav-strip">${f.colors.map(h=>`<span style="background:${h}"></span>`).join('')}</div>
+      <div class="fav-title-row">
+        <span class="fav-name">${sanitizeText(f.name)}</span>
+        <div class="fav-actions">
+          <button class="btn btn-sm btn-soft" data-act="load" aria-label="Load palette">Load</button>
+          <button class="btn btn-sm btn-soft" data-act="rename" aria-label="Rename palette">Rename</button>
+          <button class="btn btn-sm btn-soft" data-act="delete" aria-label="Delete palette">Delete</button>
+        </div>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('.fav-card').forEach(card=>{
+    const id = card.dataset.id;
+    card.querySelector('[data-act="load"]').onclick = ()=>{
+      const f = getFavorites().find(x=>x.id===id);
+      if(f){ palette = f.colors.map(hex=>({hex,locked:false})); persistPalette(); renderPalette(true); toast('Palette loaded!'); document.getElementById('generator').scrollIntoView({behavior:'smooth'}); }
+    };
+    card.querySelector('[data-act="rename"]').onclick = ()=>{
+      const name = prompt('New name for this palette:');
+      if(name){ renameFavorite(id,name); renderFavorites(); toast('Renamed!'); }
+    };
+    card.querySelector('[data-act="delete"]').onclick = ()=>{
+      deleteFavorite(id); renderFavorites(); toast('Palette deleted');
+    };
+  });
+}
+
+/* ---- SHARING ---- */
+function updateShareLink(){
+  const hexList = palette.map(c=>c.hex.replace('#','')).join('-');
+  const url = `${location.origin}${location.pathname}?palette=${hexList}`;
+  const input = document.getElementById('shareLinkInput');
+  if(input) input.value = url;
+}
+function loadPaletteFromURL(){
+  const params = new URLSearchParams(location.search);
+  const raw = params.get('palette');
+  if(!raw) return null;
+  const hexes = raw.split('-').map(h=> '#'+h).filter(isValidHex).map(normalizeHex);
+  return hexes.length >= 2 ? hexes : null;
+}
+
+/* ---- EXPORTS WIRE-UP ---- */
+function currentHexes(){ return palette.map(c=>c.hex); }
+function wireExports(){
+  document.getElementById('exportPNG').onclick = ()=>{ exportPaletteAsPNG(currentHexes()); toast('PNG downloaded!'); };
+  document.getElementById('exportGIF').onclick = ()=>{ toast('Rendering GIF...'); setTimeout(()=>{ exportPaletteAsGIF(currentHexes()); toast('GIF created!'); }, 50); };
+  document.getElementById('exportCSS').onclick = ()=>{ downloadTextFile(paletteToCSS(currentHexes()),'huefy-palette.css','text/css'); toast('CSS downloaded!'); };
+  document.getElementById('exportJSON').onclick = ()=>{ downloadTextFile(paletteToJSON(currentHexes()),'huefy-palette.json','application/json'); toast('JSON downloaded!'); };
+  document.getElementById('exportTXT').onclick = ()=>{ downloadTextFile(paletteToTXT(currentHexes()),'huefy-palette.txt','text/plain'); toast('TXT downloaded!'); };
+  document.getElementById('copyShareLink').onclick = ()=> copyText(document.getElementById('shareLinkInput').value, 'Share link copied!');
+  document.getElementById('webShareBtn').onclick = async ()=>{
+    const url = document.getElementById('shareLinkInput').value;
+    if(navigator.share){ try{ await navigator.share({ title:'My Huefy Palette', url }); }catch(e){} }
+    else { copyText(url, 'Share link copied!'); }
+  };
+}
+
+/* ---- B&W INTERACTIVE ---- */
+function setupBWZone(){
+  const zone = document.getElementById('bwZone');
+  const caption = document.getElementById('bwCaption');
+  let activated = false;
+  function activate(e){
+    if(activated) return;
+    activated = true;
+    zone.classList.add('activated');
+    if(!prefersReducedMotion()){
+      const rect = zone.getBoundingClientRect();
+      const ripple = document.createElement('div');
+      ripple.className = 'bw-ripple';
+      const size = Math.max(rect.width, rect.height) * 2;
+      ripple.style.width = size+'px'; ripple.style.height = size+'px';
+      const x = (e && e.clientX ? e.clientX - rect.left : rect.width/2) - size/2;
+      const y = (e && e.clientY ? e.clientY - rect.top : rect.height/2) - size/2;
+      ripple.style.left = x+'px'; ripple.style.top = y+'px';
+      zone.appendChild(ripple);
+      requestAnimationFrame(()=> ripple.classList.add('animate'));
+      setTimeout(()=> ripple.remove(), 1200);
+      for(let i=0;i<18;i++){
+        const p = document.createElement('div');
+        p.className = 'bw-particle';
+        const colors = ['#FF6B6B','#FFD166','#28D9C5','#7C5CFF','#FF6B9D'];
+        p.style.background = pick(colors);
+        p.style.left = (rect.width/2)+'px'; p.style.top = (rect.height/2)+'px';
+        const angle = Math.random()*Math.PI*2; const dist = 80+Math.random()*140;
+        p.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+        p.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+        zone.appendChild(p);
+        requestAnimationFrame(()=> p.classList.add('animate'));
+        setTimeout(()=> p.remove(), 1100);
+      }
+    }
+    setTimeout(()=>{ caption.textContent = 'Welcome back to color.'; }, prefersReducedMotion() ? 0 : 500);
+    toast('Welcome back to color.', '&#127752;');
+  }
+  zone.addEventListener('click', activate);
+  zone.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activate(e); } });
+}
+
+/* ---- SAVE MODAL ---- */
+function wireSaveModal(){
+  document.getElementById('btnSavePalette').onclick = ()=>{
+    document.getElementById('paletteNameInput').value = '';
+    openModal('saveModal');
+  };
+  document.getElementById('confirmSaveBtn').onclick = ()=>{
+    const name = document.getElementById('paletteNameInput').value || 'Untitled Palette';
+    addFavorite(name, currentHexes());
+    closeModal('saveModal');
+    renderFavorites();
+    toast('Palette saved!');
+  };
+}
+
+/* ---- KEYBOARD SHORTCUTS ---- */
+function wireKeyboardShortcuts(){
+  document.addEventListener('keydown', (e)=>{
+    const tag = (e.target.tagName || '').toLowerCase();
+    const typing = tag === 'input' || tag === 'textarea' || e.target.isContentEditable;
+    if(e.code === 'Space' && !typing){ e.preventDefault(); generatePalette(); }
+    else if(e.key === '/' && !typing){ e.preventDefault(); document.getElementById('librarySearch').focus(); }
+    else if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){ e.preventDefault(); document.getElementById('btnSavePalette').click(); }
+  });
+}
+
+/* ---- INIT ---- */
+document.addEventListener('DOMContentLoaded', ()=>{
+  initSharedChrome('generator');
+  const urlPalette = loadPaletteFromURL();
+  initPalette(urlPalette);
+  setupDragAndDrop();
+  renderFamilyChips();
+  renderShadeChips();
+  renderLibrary();
+  renderTemplates();
+  renderColorOfDay();
+  renderStories();
+  renderFavorites();
+  wireExports();
+  wireSaveModal();
+  wireKeyboardShortcuts();
+  setupBWZone();
+
+  document.getElementById('btnGenerate').onclick = generatePalette;
+  document.getElementById('btnShuffle').onclick = shufflePalette;
+  document.getElementById('btnAddColor').onclick = addColorToPaletteRandom;
+  document.getElementById('btnReset').onclick = resetPalette;
+  document.getElementById('btnSharePalette').onclick = ()=> document.getElementById('export').scrollIntoView({behavior:'smooth'});
+  document.getElementById('librarySearch').addEventListener('input', (e)=>{
+    libraryFilters.query = e.target.value; libraryVisibleCount = LIBRARY_PAGE_SIZE; renderLibrary();
+  });
+  document.getElementById('clearFilters').onclick = ()=>{
+    libraryFilters = { family:null, shade:null, query:'' };
+    document.getElementById('librarySearch').value = '';
+    document.querySelectorAll('#familyChips .chip').forEach(c=>c.classList.remove('active'));
+    document.querySelector('#familyChips .chip[data-family=""]').classList.add('active');
+    document.querySelectorAll('#shadeChips .chip').forEach(c=>c.classList.remove('active'));
+    document.querySelector('#shadeChips .chip[data-shade=""]').classList.add('active');
+    libraryVisibleCount = LIBRARY_PAGE_SIZE;
+    renderLibrary();
+  };
+  document.getElementById('btnLoadMore').onclick = ()=>{ libraryVisibleCount += LIBRARY_PAGE_SIZE; renderLibrary(); };
+
+  if(urlPalette){ toast('Palette loaded from link!'); }
+});
+</script>
+</body>
+</html>
